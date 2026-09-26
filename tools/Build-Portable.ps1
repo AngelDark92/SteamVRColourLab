@@ -55,7 +55,7 @@ $oldPyInstallerCache = $env:PYINSTALLER_CONFIG_DIR
 try {
     if ($env:OS -ne 'Windows_NT') { throw 'Build the Windows package on Windows.' }
     Set-Location -LiteralPath $repoRoot
-    $requiredFiles = @('app.py', 'requirements.txt', 'README.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'TEST_RESULTS.md')
+    $requiredFiles = @('app.py', 'requirements.txt', 'README.md', 'TECHNICAL_REFERENCE.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'TEST_RESULTS.md')
     foreach ($name in $requiredFiles) {
         if (-not (Test-Path -LiteralPath (Join-Path $repoRoot $name) -PathType Leaf)) {
             throw "Required source file is missing: $name"
@@ -126,7 +126,7 @@ print(json.dumps({'version': platform.python_version(), 'base': sys.base_prefix,
     if (-not (Test-Path -LiteralPath (Join-Path $stagedPackage 'SteamVRColourLab.exe') -PathType Leaf)) {
         throw 'PyInstaller did not create the expected executable.'
     }
-    foreach ($name in @('README.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'TEST_RESULTS.md')) {
+    foreach ($name in @('README.md', 'TECHNICAL_REFERENCE.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'TEST_RESULTS.md')) {
         Copy-Item -LiteralPath (Join-Path $repoRoot $name) -Destination $stagedPackage
     }
     Copy-Item -LiteralPath (Join-Path $repoRoot 'examples') -Destination $stagedPackage -Recurse
