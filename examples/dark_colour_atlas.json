@@ -1,0 +1,29 @@
+{
+  "mode": "compare",
+  "pattern": "atlas",
+  "start_rgb": [
+    0.02,
+    0.02,
+    0.02
+  ],
+  "end_rgb": [
+    0.2,
+    0.2,
+    0.2
+  ],
+  "hue": 0.0,
+  "saturation": 0.65,
+  "value_min": 0.01,
+  "value_max": 0.2,
+  "labels": false,
+  "swap": false,
+  "animate": false,
+  "panel_width": 3.6,
+  "panel_height": 2.1,
+  "panel_distance": 2.5,
+  "stream_depth_requested": "unknown",
+  "streaming_app": "",
+  "codec": "",
+  "bitrate_mbps": "",
+  "notes": ""
+}

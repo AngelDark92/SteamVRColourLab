@@ -1,0 +1,5 @@
+# Runtime dependencies only; pinned for reproducible installs.
+# tkinter and ctypes come with the standard python.org Windows installer.
+glfw==2.10.0
+openvr==2.12.1401
+Pillow==12.3.0

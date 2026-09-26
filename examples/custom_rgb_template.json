@@ -1,0 +1,29 @@
+{
+  "mode": "compare",
+  "pattern": "horizontal",
+  "start_rgb": [
+    0.017,
+    0.029,
+    0.063
+  ],
+  "end_rgb": [
+    0.134,
+    0.187,
+    0.245
+  ],
+  "hue": 210.0,
+  "saturation": 0.65,
+  "value_min": 0.02,
+  "value_max": 0.2,
+  "labels": true,
+  "swap": false,
+  "animate": false,
+  "panel_width": 3.6,
+  "panel_height": 2.1,
+  "panel_distance": 2.5,
+  "stream_depth_requested": "unknown",
+  "streaming_app": "",
+  "codec": "",
+  "bitrate_mbps": "",
+  "notes": ""
+}
