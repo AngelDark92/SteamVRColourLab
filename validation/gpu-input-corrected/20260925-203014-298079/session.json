@@ -1,0 +1,107 @@
+{
+  "started_at": "2026-09-25T18:30:14.298071+00:00",
+  "metadata": {
+    "app_version": "0.2.1",
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+    "bundled_runtime": false,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "graphics": {
+      "vendor": "NVIDIA Corporation",
+      "renderer": "NVIDIA GeForce RTX 5090/PCIe/SSE2",
+      "version": "3.3.0 NVIDIA 616.92",
+      "glsl": "3.30 NVIDIA via Cg compiler"
+    },
+    "source_precision_check": {
+      "status": "passed",
+      "scope": "Application source buffer only, before SteamVR/compression/display",
+      "target": "GL_RGBA16F, linear-light RGB, opaque alpha",
+      "size": [
+        4096,
+        8
+      ],
+      "unique_red_levels": {
+        "8bit": 256,
+        "10bit": 1024,
+        "reference": 4010
+      },
+      "maximum_srgb_roundtrip_error": {
+        "8bit": 0.0003137233224206337,
+        "10bit": 0.00031033370392463677,
+        "reference": 0.00031555193317844843
+      },
+      "channel_bits": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    "shader_sha256": "81709e576855b78ea865fc60d04d739a54fc3be3d6f78020954c94602c88f77c",
+    "quantisation": "sRGB-encoded RGB: floor(clamp(s,0,1)*(2^bits-1)+0.5)/(2^bits-1)",
+    "submission": "sRGB decode -> linear GL_RGBA16F -> OpenVR ColorSpace_Linear",
+    "reference": "No intentional quantisation; still limited by float shader/float16 buffer precision",
+    "stream_depth_control": "Not controlled, measured or confirmed by this application",
+    "desktop_preview": "Convenience preview only; not a high-bit-depth measurement",
+    "packages": {
+      "glfw": "2.10.0",
+      "openvr": "2.12.1401",
+      "Pillow": "12.3.0"
+    },
+    "vr": {
+      "api": "OpenVR scene application",
+      "headset_model": "Oculus Quest2",
+      "tracking_system": "oculus",
+      "refresh_hz": 90.0,
+      "recommended_eye_size_at_launch": [
+        4348,
+        4700
+      ],
+      "actual_eye_size": [
+        4348,
+        4700
+      ],
+      "submitted_format": "GL_RGBA16F",
+      "submitted_colour_space": "ColorSpace_Linear (sRGB-decoded values)",
+      "actual_stream_bit_depth": "unknown; not exposed or inferred by this app",
+      "actual_stream_bitrate": "unknown; record independently",
+      "panel_native_bit_depth": "unknown; not inferred"
+    },
+    "vr_controls": {
+      "interface": "Visible in-scene VR menu and SteamVR dashboard; native mouse/pointer events",
+      "hand_tracking": "Requires pointer/select support from SteamVR and the streaming driver",
+      "dashboard_pixels": [
+        1280,
+        800
+      ]
+    }
+  },
+  "initial_settings": {
+    "mode": "compare",
+    "pattern": "horizontal",
+    "start_rgb": [
+      0.02,
+      0.02,
+      0.02
+    ],
+    "end_rgb": [
+      0.2,
+      0.2,
+      0.2
+    ],
+    "hue": 210.0,
+    "saturation": 0.65,
+    "value_min": 0.02,
+    "value_max": 0.2,
+    "labels": true,
+    "swap": false,
+    "animate": false,
+    "panel_width": 3.6,
+    "panel_height": 2.1,
+    "panel_distance": 2.5,
+    "stream_depth_requested": "unknown",
+    "streaming_app": "",
+    "codec": "",
+    "bitrate_mbps": "",
+    "notes": ""
+  }
+}

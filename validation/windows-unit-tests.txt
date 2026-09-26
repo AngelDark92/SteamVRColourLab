@@ -1,0 +1,72 @@
+test_48_presets (tests.test_core.CoreTests.test_48_presets) ... ok
+test_config_roundtrip (tests.test_core.CoreTests.test_config_roundtrip) ... ok
+test_hues (tests.test_core.CoreTests.test_hues) ... ok
+test_invalid_configs (tests.test_core.CoreTests.test_invalid_configs) ... ok
+test_invalid_precision (tests.test_core.CoreTests.test_invalid_precision) ... ok
+test_matrix_identity (tests.test_core.CoreTests.test_matrix_identity) ... ok
+test_openvr_matrix_conversion (tests.test_core.CoreTests.test_openvr_matrix_conversion) ... ok
+test_quantisation_half_up (tests.test_core.CoreTests.test_quantisation_half_up) ... ok
+test_quantisation_level_count (tests.test_core.CoreTests.test_quantisation_level_count) ... ok
+test_recenter_model (tests.test_core.CoreTests.test_recenter_model) ... ok
+test_rigid_transform_inverse (tests.test_core.CoreTests.test_rigid_transform_inverse) ... ok
+test_srgb_roundtrip (tests.test_core.CoreTests.test_srgb_roundtrip) ... ok
+test_all_source_modes_and_patterns_are_reachable (tests.test_dashboard.DashboardControlTests.test_all_source_modes_and_patterns_are_reachable) ... ok
+test_append_keeps_existing_notes_and_sync_keeps_local_feedback (tests.test_dashboard.DashboardControlTests.test_append_keeps_existing_notes_and_sync_keeps_local_feedback) ... ok
+test_every_settings_field_can_be_changed_using_pointer_controls (tests.test_dashboard.DashboardControlTests.test_every_settings_field_can_be_changed_using_pointer_controls) ... ok
+test_invalid_numeric_edit_and_cancel_preserve_live_configuration (tests.test_dashboard.DashboardControlTests.test_invalid_numeric_edit_and_cancel_preserve_live_configuration) ... ok
+test_invalid_snapshot_keeps_settings_and_active_cycle (tests.test_dashboard.DashboardControlTests.test_invalid_snapshot_keeps_settings_and_active_cycle) ... ok
+test_numeric_keypad_keeps_fractional_precision (tests.test_dashboard.DashboardControlTests.test_numeric_keypad_keeps_fractional_precision) ... ok
+test_recenter_cycle_and_exit_are_available_in_vr (tests.test_dashboard.DashboardControlTests.test_recenter_cycle_and_exit_are_available_in_vr) ... ok
+test_release_outside_and_focus_cancellation_do_not_activate (tests.test_dashboard.DashboardControlTests.test_release_outside_and_focus_cancellation_do_not_activate) ... ok
+test_session_metadata_and_presets_preserve_independent_source_choices (tests.test_dashboard.DashboardControlTests.test_session_metadata_and_presets_preserve_independent_source_choices) ... ok
+test_snapshot_load_and_report_ignore_stale_desktop_draft (tests.test_dashboard.DashboardControlTests.test_snapshot_load_and_report_ignore_stale_desktop_draft) ... ok
+test_close_releases_both_handles_once_and_drops_buffers (tests.test_dashboard.DashboardTransportTests.test_close_releases_both_handles_once_and_drops_buffers) ... ok
+test_dirty_hidden_ui_is_uploaded_when_visible (tests.test_dashboard.DashboardTransportTests.test_dirty_hidden_ui_is_uploaded_when_visible) ... ok
+test_empty_tuple_event_queue_exits_and_does_not_upload_clean_ui (tests.test_dashboard.DashboardTransportTests.test_empty_tuple_event_queue_exits_and_does_not_upload_clean_ui) ... ok
+test_focus_loss_and_hidden_overlay_cancel_pending_click (tests.test_dashboard.DashboardTransportTests.test_focus_loss_and_hidden_overlay_cancel_pending_click) ... ok
+test_initialization_failure_cleans_up_partial_dashboard (tests.test_dashboard.DashboardTransportTests.test_initialization_failure_cleans_up_partial_dashboard) ... ok
+test_native_bottom_left_coordinates_and_either_hand_activate_controls (tests.test_dashboard.DashboardTransportTests.test_native_bottom_left_coordinates_and_either_hand_activate_controls) ... ok
+test_native_rgba_upload_and_mouse_scale_match_ui (tests.test_dashboard.DashboardTransportTests.test_native_rgba_upload_and_mouse_scale_match_ui) ... ok
+test_other_hand_cannot_release_owned_click (tests.test_dashboard.DashboardTransportTests.test_other_hand_cannot_release_owned_click) ... ok
+test_runtime_image_failure_is_reported (tests.test_dashboard.DashboardTransportTests.test_runtime_image_failure_is_reported) ... ok
+test_thumbnail_quit_is_drained (tests.test_dashboard.DashboardTransportTests.test_thumbnail_quit_is_drained) ... ok
+test_cli_defaults_resolve_under_portable_home (tests.test_portable.PortablePathTests.test_cli_defaults_resolve_under_portable_home) ... ok
+test_frozen_home_uses_executable_not_unpack_directory_or_cwd (tests.test_portable.PortablePathTests.test_frozen_home_uses_executable_not_unpack_directory_or_cwd) ... ok
+test_source_home_uses_entry_script_not_python_executable (tests.test_portable.PortablePathTests.test_source_home_uses_entry_script_not_python_executable) ... ok
+test_zipapp_home_is_beside_archive_not_inside_it (tests.test_portable.PortablePathTests.test_zipapp_home_is_beside_archive_not_inside_it) ... ok
+test_explicit_settings_directory_is_honoured (tests.test_portable.PortablePersistenceTests.test_explicit_settings_directory_is_honoured) ... ok
+test_report_records_live_state_without_applying_invalid_desktop_inputs (tests.test_portable.PortablePersistenceTests.test_report_records_live_state_without_applying_invalid_desktop_inputs) ... ok
+test_snapshot_roundtrip_and_picker_stay_under_portable_home (tests.test_portable.PortablePersistenceTests.test_snapshot_roundtrip_and_picker_stay_under_portable_home) ... ok
+test_actual_float_format (tests.test_render.RenderTests.test_actual_float_format) ... ok
+test_all_patterns_modes_and_labels (tests.test_render.RenderTests.test_all_patterns_modes_and_labels) ... ok
+test_all_presets (tests.test_render.RenderTests.test_all_presets) ... ok
+test_compare_top_bottom (tests.test_render.RenderTests.test_compare_top_bottom) ... ok
+test_dither_is_deterministic_and_bounded (tests.test_render.RenderTests.test_dither_is_deterministic_and_bounded) ... ok
+test_motion_changes_pattern_but_static_ignores_time (tests.test_render.RenderTests.test_motion_changes_pattern_but_static_ignores_time) ... ok
+test_no_gl_errors (tests.test_render.RenderTests.test_no_gl_errors) ... ok
+test_source_precision (tests.test_render.RenderTests.test_source_precision) ... ok
+test_three_section_order (tests.test_render.RenderTests.test_three_section_order) ... ok
+test_vertical_restarts_in_each_section (tests.test_render.RenderTests.test_vertical_restarts_in_each_section) ... ok
+test_custom_fractional_rgb (tests.test_ui.UITests.test_custom_fractional_rgb) ... ok
+test_default_readback (tests.test_ui.UITests.test_default_readback) ... ok
+test_hue_and_atlas_controls (tests.test_ui.UITests.test_hue_and_atlas_controls) ... ok
+test_invalid_input_keeps_last_valid_configuration (tests.test_ui.UITests.test_invalid_input_keeps_last_valid_configuration) ... ok
+test_selected_preset_updates_navigation_index (tests.test_ui.UITests.test_selected_preset_updates_navigation_index) ... ok
+test_stream_request_does_not_change_source_mode (tests.test_ui.UITests.test_stream_request_does_not_change_source_mode) ... ok
+test_anchor_remains_world_fixed_until_recenter (tests.test_vr_contract.VRContractTests.test_anchor_remains_world_fixed_until_recenter) ... ok
+test_both_eyes_receive_linear_float_target_handles (tests.test_vr_contract.VRContractTests.test_both_eyes_receive_linear_float_target_handles) ... ok
+test_close_shuts_down_runtime (tests.test_vr_contract.VRContractTests.test_close_shuts_down_runtime) ... ok
+test_rejected_float_texture_does_not_fallback (tests.test_vr_contract.VRContractTests.test_rejected_float_texture_does_not_fallback) ... ok
+test_tracking_invalid_does_not_submit (tests.test_vr_contract.VRContractTests.test_tracking_invalid_does_not_submit) ... ok
+
+----------------------------------------------------------------------
+Ran 60 tests in 2.100s
+
+OK
+Old status
+Panel will recenter at the next valid headset pose; motion phase reset.
+Saved settings: settings-20260925-184330-010388.json
+Saved report + replayable settings: C:\Users\Angelo\AppData\Local\Temp\tmpudcgub_q\runs\20260925-184330-008214
+Saved settings: settings-20260925-184330-195458.json
+Saved report + replayable settings: C:\Users\Angelo\AppData\Local\Temp\tmpkwl9iwcq\runs\20260925-184330-198360
+Saved settings: settings-20260925-184330-209480.json

@@ -1,0 +1,38 @@
+test_48_presets (tests.test_core.CoreTests.test_48_presets) ... ok
+test_config_roundtrip (tests.test_core.CoreTests.test_config_roundtrip) ... ok
+test_hues (tests.test_core.CoreTests.test_hues) ... ok
+test_invalid_configs (tests.test_core.CoreTests.test_invalid_configs) ... ok
+test_invalid_precision (tests.test_core.CoreTests.test_invalid_precision) ... ok
+test_matrix_identity (tests.test_core.CoreTests.test_matrix_identity) ... ok
+test_openvr_matrix_conversion (tests.test_core.CoreTests.test_openvr_matrix_conversion) ... ok
+test_quantisation_half_up (tests.test_core.CoreTests.test_quantisation_half_up) ... ok
+test_quantisation_level_count (tests.test_core.CoreTests.test_quantisation_level_count) ... ok
+test_recenter_model (tests.test_core.CoreTests.test_recenter_model) ... ok
+test_rigid_transform_inverse (tests.test_core.CoreTests.test_rigid_transform_inverse) ... ok
+test_srgb_roundtrip (tests.test_core.CoreTests.test_srgb_roundtrip) ... ok
+test_actual_float_format (tests.test_render.RenderTests.test_actual_float_format) ... ok
+test_all_patterns_modes_and_labels (tests.test_render.RenderTests.test_all_patterns_modes_and_labels) ... ok
+test_all_presets (tests.test_render.RenderTests.test_all_presets) ... ok
+test_compare_top_bottom (tests.test_render.RenderTests.test_compare_top_bottom) ... ok
+test_dither_is_deterministic_and_bounded (tests.test_render.RenderTests.test_dither_is_deterministic_and_bounded) ... ok
+test_motion_changes_pattern_but_static_ignores_time (tests.test_render.RenderTests.test_motion_changes_pattern_but_static_ignores_time) ... ok
+test_no_gl_errors (tests.test_render.RenderTests.test_no_gl_errors) ... ok
+test_source_precision (tests.test_render.RenderTests.test_source_precision) ... ok
+test_three_section_order (tests.test_render.RenderTests.test_three_section_order) ... ok
+test_vertical_restarts_in_each_section (tests.test_render.RenderTests.test_vertical_restarts_in_each_section) ... ok
+test_custom_fractional_rgb (tests.test_ui.UITests.test_custom_fractional_rgb) ... ok
+test_default_readback (tests.test_ui.UITests.test_default_readback) ... ok
+test_hue_and_atlas_controls (tests.test_ui.UITests.test_hue_and_atlas_controls) ... ok
+test_invalid_input_keeps_last_valid_configuration (tests.test_ui.UITests.test_invalid_input_keeps_last_valid_configuration) ... ok
+test_selected_preset_updates_navigation_index (tests.test_ui.UITests.test_selected_preset_updates_navigation_index) ... ok
+test_stream_request_does_not_change_source_mode (tests.test_ui.UITests.test_stream_request_does_not_change_source_mode) ... ok
+test_anchor_remains_world_fixed_until_recenter (tests.test_vr_contract.VRContractTests.test_anchor_remains_world_fixed_until_recenter) ... ok
+test_both_eyes_receive_linear_float_target_handles (tests.test_vr_contract.VRContractTests.test_both_eyes_receive_linear_float_target_handles) ... ok
+test_close_shuts_down_runtime (tests.test_vr_contract.VRContractTests.test_close_shuts_down_runtime) ... ok
+test_rejected_float_texture_does_not_fallback (tests.test_vr_contract.VRContractTests.test_rejected_float_texture_does_not_fallback) ... ok
+test_tracking_invalid_does_not_submit (tests.test_vr_contract.VRContractTests.test_tracking_invalid_does_not_submit) ... ok
+
+----------------------------------------------------------------------
+Ran 33 tests in 1.379s
+
+OK

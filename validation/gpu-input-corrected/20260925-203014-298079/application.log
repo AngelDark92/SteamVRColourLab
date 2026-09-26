@@ -1,0 +1,22 @@
+2026-09-25 20:31:09,030 ERROR Fatal application error
+Traceback (most recent call last):
+  File "D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\app.py", line 467, in main
+    app.run()
+    ~~~~~~~^^
+  File "D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\app.py", line 392, in run
+    self.dashboard.pump()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\colourlab\dashboard.py", line 190, in pump
+    self.refresh_images()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\colourlab\dashboard.py", line 99, in refresh_images
+    self.upload(self.handle, image)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\colourlab\dashboard.py", line 117, in upload
+    texture = self.textures[handle].update(image)
+  File "D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\colourlab\overlay_texture.py", line 44, in update
+    g.check("VR controls texture upload")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\colourlab\gl.py", line 76, in check
+    raise RuntimeError(f"OpenGL error 0x{error:04x} during {label}.")
+RuntimeError: OpenGL error 0x0501 during VR controls texture upload.

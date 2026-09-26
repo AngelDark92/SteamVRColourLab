@@ -1,0 +1,367 @@
+{"utc": "2026-09-25T18:23:51.913570+00:00", "event": "starting", "data": {"desktop_only": false, "settings": {"mode": "compare", "pattern": "horizontal", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}}}
+{"utc": "2026-09-25T18:23:53.090134+00:00", "event": "vr_connected", "data": {"api": "OpenVR scene application", "headset_model": "Oculus Quest2", "tracking_system": "oculus", "refresh_hz": 90.0, "recommended_eye_size_at_launch": [4348, 4700], "actual_eye_size": [4348, 4700], "submitted_format": "GL_RGBA16F", "submitted_colour_space": "ColorSpace_Linear (sRGB-decoded values)", "actual_stream_bit_depth": "unknown; not exposed or inferred by this app", "actual_stream_bitrate": "unknown; record independently", "panel_native_bit_depth": "unknown; not inferred"}}
+{"utc": "2026-09-25T18:23:53.090545+00:00", "event": "initialised", "data": {"app_version": "0.2.1", "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]", "bundled_runtime": false, "platform": "Windows-11-10.0.26200-SP0", "graphics": {"vendor": "NVIDIA Corporation", "renderer": "NVIDIA GeForce RTX 5090/PCIe/SSE2", "version": "3.3.0 NVIDIA 616.92", "glsl": "3.30 NVIDIA via Cg compiler"}, "source_precision_check": {"status": "passed", "scope": "Application source buffer only, before SteamVR/compression/display", "target": "GL_RGBA16F, linear-light RGB, opaque alpha", "size": [4096, 8], "unique_red_levels": {"8bit": 256, "10bit": 1024, "reference": 4010}, "maximum_srgb_roundtrip_error": {"8bit": 0.0003137233224206337, "10bit": 0.00031033370392463677, "reference": 0.00031555193317844843}, "channel_bits": [16, 16, 16, 16]}, "shader_sha256": "81709e576855b78ea865fc60d04d739a54fc3be3d6f78020954c94602c88f77c", "quantisation": "sRGB-encoded RGB: floor(clamp(s,0,1)*(2^bits-1)+0.5)/(2^bits-1)", "submission": "sRGB decode -> linear GL_RGBA16F -> OpenVR ColorSpace_Linear", "reference": "No intentional quantisation; still limited by float shader/float16 buffer precision", "stream_depth_control": "Not controlled, measured or confirmed by this application", "desktop_preview": "Convenience preview only; not a high-bit-depth measurement", "packages": {"glfw": "2.10.0", "openvr": "2.12.1401", "Pillow": "12.3.0"}, "vr": {"api": "OpenVR scene application", "headset_model": "Oculus Quest2", "tracking_system": "oculus", "refresh_hz": 90.0, "recommended_eye_size_at_launch": [4348, 4700], "actual_eye_size": [4348, 4700], "submitted_format": "GL_RGBA16F", "submitted_colour_space": "ColorSpace_Linear (sRGB-decoded values)", "actual_stream_bit_depth": "unknown; not exposed or inferred by this app", "actual_stream_bitrate": "unknown; record independently", "panel_native_bit_depth": "unknown; not inferred"}, "vr_controls": {"interface": "Visible in-scene VR menu and SteamVR dashboard; native mouse/pointer events", "hand_tracking": "Requires pointer/select support from SteamVR and the streaming driver", "dashboard_pixels": [1280, 800]}}}
+{"utc": "2026-09-25T18:23:53.091415+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:53.107061+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 0, "select_releases": 0}}
+{"utc": "2026-09-25T18:23:53.305560+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:53.305995+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:53.306474+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:53.306881+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:55.168216+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:55.179099+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.114748+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.115259+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.405194+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.416155+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.534054+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.534571+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.600555+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.601097+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.667323+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.667837+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.712015+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.734189+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.745290+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.745811+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.778614+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.779121+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.823321+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.823867+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.875715+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.876240+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:56.920201+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:56.920744+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:57.008937+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:57.009443+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:57.108531+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 131, "select_releases": 0}}
+{"utc": "2026-09-25T18:23:58.104532+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:58.115672+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:59.116080+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 241, "select_releases": 1}}
+{"utc": "2026-09-25T18:23:59.250565+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:59.251073+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:59.371951+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:59.372464+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:59.405330+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:59.405890+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:59.516666+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:59.517450+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:59.649740+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:23:59.650264+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:59.890124+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:23:59.901300+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:00.212388+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:00.212906+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:00.456781+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:00.457298+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:00.501232+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:00.501765+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:01.123043+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 412, "select_releases": 1}}
+{"utc": "2026-09-25T18:24:01.323356+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:01.323848+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:01.356721+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:01.357225+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:01.745746+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:01.746246+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:01.779334+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:01.779902+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:02.412415+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:02.412952+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:02.445649+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:02.446157+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:02.556816+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:02.557324+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:02.957374+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:02.968511+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:03.124069+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 584, "select_releases": 1}}
+{"utc": "2026-09-25T18:24:03.425250+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:03.436203+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:03.480882+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:03.491891+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:03.736770+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:03.737286+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:03.792246+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:03.792763+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:04.392278+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:04.392898+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:04.458512+00:00", "event": "settings", "data": {"reason": "VR dashboard", "settings": {"mode": "reference", "pattern": "horizontal", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}, "motion_phase_reset": true}}
+{"utc": "2026-09-25T18:24:04.492285+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:04.492783+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:04.525574+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:04.526107+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:05.115467+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:05.115983+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:05.126079+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 756, "select_releases": 2}}
+{"utc": "2026-09-25T18:24:05.182092+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:05.182642+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:05.449156+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:05.460318+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:06.128439+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:06.128960+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:06.693858+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:06.694389+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:06.804449+00:00", "event": "settings", "data": {"reason": "VR dashboard", "settings": {"mode": "reference", "pattern": "vertical", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}, "motion_phase_reset": true}}
+{"utc": "2026-09-25T18:24:06.838526+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:06.839152+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:06.871501+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:06.872102+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:07.126708+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 930, "select_releases": 3}}
+{"utc": "2026-09-25T18:24:07.593808+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:07.604814+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:07.693412+00:00", "event": "settings", "data": {"reason": "VR dashboard", "settings": {"mode": "reference", "pattern": "radial", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}, "motion_phase_reset": true}}
+{"utc": "2026-09-25T18:24:07.727134+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:07.727663+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:07.760358+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:07.760860+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:09.146086+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 1108, "select_releases": 4}}
+{"utc": "2026-09-25T18:24:09.165571+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:09.176902+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:09.276292+00:00", "event": "settings", "data": {"reason": "VR dashboard", "settings": {"mode": "reference", "pattern": "solid", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}, "motion_phase_reset": true}}
+{"utc": "2026-09-25T18:24:09.309810+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:09.310331+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:09.342608+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:09.343120+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:10.774829+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:10.775348+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:10.896905+00:00", "event": "settings", "data": {"reason": "VR dashboard", "settings": {"mode": "reference", "pattern": "hue", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}, "motion_phase_reset": true}}
+{"utc": "2026-09-25T18:24:10.930996+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:10.931532+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:10.965371+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:10.965890+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:11.132596+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 1281, "select_releases": 6}}
+{"utc": "2026-09-25T18:24:13.133029+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 1461, "select_releases": 6}}
+{"utc": "2026-09-25T18:24:13.822172+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:13.822695+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:13.922016+00:00", "event": "settings", "data": {"reason": "VR dashboard", "settings": {"mode": "reference", "pattern": "atlas", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}, "motion_phase_reset": true}}
+{"utc": "2026-09-25T18:24:13.955659+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:13.956159+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:13.989055+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:13.989555+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:15.135868+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 1638, "select_releases": 7}}
+{"utc": "2026-09-25T18:24:16.814092+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:16.814660+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:16.892098+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:16.903171+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:17.136385+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 1816, "select_releases": 7}}
+{"utc": "2026-09-25T18:24:17.961027+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:17.961548+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:18.528586+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:18.539737+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:19.140887+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 1994, "select_releases": 7}}
+{"utc": "2026-09-25T18:24:20.766956+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:20.767494+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:21.144927+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 2173, "select_releases": 7}}
+{"utc": "2026-09-25T18:24:21.334803+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:21.335375+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:21.708348+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:21.708892+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:21.796890+00:00", "event": "settings", "data": {"reason": "VR dashboard", "settings": {"mode": "8bit", "pattern": "atlas", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}, "motion_phase_reset": true}}
+{"utc": "2026-09-25T18:24:21.830749+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:21.831246+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:21.864317+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:21.875272+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:22.885532+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:22.886031+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:22.951740+00:00", "event": "settings", "data": {"reason": "VR dashboard", "settings": {"mode": "10bit", "pattern": "atlas", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}, "motion_phase_reset": true}}
+{"utc": "2026-09-25T18:24:22.990732+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:22.991266+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:23.018880+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:23.029949+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:23.151783+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 2347, "select_releases": 9}}
+{"utc": "2026-09-25T18:24:23.823662+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:23.824179+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:23.934067+00:00", "event": "settings", "data": {"reason": "VR dashboard", "settings": {"mode": "8bit", "pattern": "atlas", "start_rgb": [0.02, 0.02, 0.02], "end_rgb": [0.2, 0.2, 0.2], "hue": 210.0, "saturation": 0.65, "value_min": 0.02, "value_max": 0.2, "labels": true, "swap": false, "animate": false, "panel_width": 3.6, "panel_height": 2.1, "panel_distance": 2.5, "stream_depth_requested": "unknown", "streaming_app": "", "codec": "", "bitrate_mbps": "", "notes": ""}, "motion_phase_reset": true}}
+{"utc": "2026-09-25T18:24:23.967989+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:23.968507+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:24.001306+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:24.001812+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:24.659225+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:24.659745+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:24.692998+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:24.693503+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:25.169692+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 2521, "select_releases": 10}}
+{"utc": "2026-09-25T18:24:25.188122+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:25.188636+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:25.679314+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:25.679809+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:26.427747+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:26.428258+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:26.594354+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:26.594857+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:26.627698+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:26.638739+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:26.672151+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:26.672649+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:27.166124+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 2693, "select_releases": 10}}
+{"utc": "2026-09-25T18:24:27.665045+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:27.665563+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:28.511489+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:28.511993+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:29.167900+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 2869, "select_releases": 10}}
+{"utc": "2026-09-25T18:24:29.246311+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:29.246829+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:29.279715+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:29.280228+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:30.081596+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:30.082099+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:30.114918+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:30.115415+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:31.172202+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 3045, "select_releases": 10}}
+{"utc": "2026-09-25T18:24:33.012848+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:33.023828+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:33.112428+00:00", "event": "recenter_requested", "data": {}}
+{"utc": "2026-09-25T18:24:33.166834+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:33.167371+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:33.190625+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 3221, "select_releases": 11}}
+{"utc": "2026-09-25T18:24:33.201956+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:33.202500+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:33.932687+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:33.933199+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:34.288746+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:34.300000+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:35.032684+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:35.033198+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:35.198858+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 3398, "select_releases": 11}}
+{"utc": "2026-09-25T18:24:35.310501+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:35.311014+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:35.343725+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:35.344243+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:35.710549+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:35.711076+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:35.754946+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:35.755531+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:35.899403+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:35.899915+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:36.511349+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:36.511907+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:37.201254+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 3507, "select_releases": 11}}
+{"utc": "2026-09-25T18:24:39.929430+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:39.929949+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:40.130015+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:40.130529+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:40.230538+00:00", "event": "vr_menu", "data": {"expanded": false}}
+{"utc": "2026-09-25T18:24:40.263029+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:40.263098+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:40.263707+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:40.264183+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:40.296612+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:40.297145+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:41.210757+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": false, "pointer_moves": 3595, "select_releases": 12}}
+{"utc": "2026-09-25T18:24:42.290821+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:42.291344+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:43.215182+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": false, "pointer_moves": 3681, "select_releases": 12}}
+{"utc": "2026-09-25T18:24:44.699300+00:00", "event": "vr_menu", "data": {"expanded": true}}
+{"utc": "2026-09-25T18:24:44.729782+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:44.730303+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:44.741029+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:44.741563+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:44.822086+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:44.822613+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:44.955738+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:44.956254+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:45.222538+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 3788, "select_releases": 13}}
+{"utc": "2026-09-25T18:24:45.590424+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:45.591065+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:45.668357+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:45.668867+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:45.701909+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:45.702411+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:45.768550+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:45.769061+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:45.802028+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:45.813059+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:45.995162+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:45.995675+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:46.214423+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:46.214924+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:46.411820+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:46.412330+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:46.456477+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:46.467379+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:46.990444+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:46.990984+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.084950+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:47.085473+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.244861+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 3956, "select_releases": 13}}
+{"utc": "2026-09-25T18:24:47.256366+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:47.257062+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.304806+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.315899+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:47.422447+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.434012+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:47.483157+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.497166+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:47.748608+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:47.749215+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.793096+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:47.793604+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.826378+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:47.826888+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.928017+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:47.928613+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.972936+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:47.983315+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:48.161193+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:48.161705+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:48.443458+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:48.443973+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:48.606599+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:48.607116+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:48.644663+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:48.645173+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:49.245716+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 4120, "select_releases": 13}}
+{"utc": "2026-09-25T18:24:49.717902+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:49.718429+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:50.094405+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:50.094929+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:50.337588+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:50.338097+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:50.648789+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:50.649312+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:50.881790+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:50.882297+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:50.926330+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:50.926895+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:51.115127+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:51.115629+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:51.264347+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 4293, "select_releases": 13}}
+{"utc": "2026-09-25T18:24:51.283690+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:51.284212+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:51.551368+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:51.561984+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:51.782112+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:51.782617+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:52.176197+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:52.187263+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:52.263942+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:52.264461+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:52.297198+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:52.297719+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:52.429040+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:52.429614+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:53.202657+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:53.203251+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:53.236126+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:53.247612+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:53.257820+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 4464, "select_releases": 13}}
+{"utc": "2026-09-25T18:24:53.793015+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:53.793530+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:53.848488+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:53.849097+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:54.256348+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:54.256854+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:54.289671+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:54.290166+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:54.356243+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:54.356786+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:54.389927+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:54.390496+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:54.467468+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:54.467986+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:54.500711+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:54.501234+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:54.602660+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:54.603181+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:54.669400+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "scene"}}
+{"utc": "2026-09-25T18:24:54.669935+00:00", "event": "vr_menu_image_loaded", "data": {"surface": "dashboard"}}
+{"utc": "2026-09-25T18:24:55.269059+00:00", "event": "vr_menu_status", "data": {"scene_visible": true, "dashboard_visible": false, "expanded": true, "pointer_moves": 4633, "select_releases": 13}}
+{"utc": "2026-09-25T18:24:55.324715+00:00", "event": "finished", "data": {"application_frames": 5400, "vr_submitted_frames": 5400, "exit_reason": "frame_limit"}}

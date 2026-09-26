@@ -1,0 +1,9 @@
+{
+  "archive": "SteamVRColourLab-Windows-x64.zip",
+  "bytes": 23960123,
+  "sha256": "677e2bdf182422a57e635bc985ac50822d001a930ec7c7196f217c0267c126d8",
+  "zip_files_verified": 1077,
+  "runtime_files_match_relocated_test": 1050,
+  "source_manifest_verified": true,
+  "no_user_runs_or_settings_in_zip": true
+}

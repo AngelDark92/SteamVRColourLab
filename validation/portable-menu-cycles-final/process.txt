@@ -1,0 +1,15 @@
+
+ERROR: RuntimeError: OpenGL error 0x0501 during SteamVR overlay texture submission.
+Traceback (most recent call last):
+  File "app.py", line 467, in main
+  File "app.py", line 392, in run
+  File "colourlab\dashboard.py", line 188, in pump
+  File "colourlab\dashboard_ui.py", line 336, in pointer
+  File "colourlab\dashboard_ui.py", line 278, in <lambda>
+  File "app.py", line 260, in toggle_vr_menu
+  File "colourlab\dashboard.py", line 93, in set_expanded
+  File "colourlab\dashboard.py", line 107, in refresh_images
+  File "colourlab\dashboard.py", line 123, in upload
+  File "colourlab\gl.py", line 76, in check
+RuntimeError: OpenGL error 0x0501 during SteamVR overlay texture submission.
+Diagnostic logs: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\validation\portable-menu-cycles-final\runs\20260925-204003-163699

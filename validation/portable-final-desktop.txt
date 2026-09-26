@@ -1,0 +1,2 @@
+Source precision check: {'8bit': 256, '10bit': 1024, 'reference': 4010}
+Run logs: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\validation\portable-final-desktop\20260925-204356-105449

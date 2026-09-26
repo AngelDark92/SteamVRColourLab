@@ -1,0 +1,11 @@
+2026-09-25 20:19:55,594 ERROR Could not destroy dashboard thumbnail
+Traceback (most recent call last):
+  File "colourlab\dashboard.py", line 102, in close
+    self.overlay.destroyOverlay(handle)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "openvr\__init__.py", line 5350, in destroyOverlay
+    openvr.error_code.OverlayError.check_error_value(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "openvr\error_code\__init__.py", line 23, in check_error_value
+    raise error_class(error_value, message)
+openvr.error_code.OverlayError_ThumbnailCantBeDestroyed

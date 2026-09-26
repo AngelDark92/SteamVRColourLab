@@ -1,0 +1,2 @@
+Source precision check: {'8bit': 256, '10bit': 1024, 'reference': 4010}
+Run logs: validation\launch-repro\20260925-201952-161974

@@ -1,0 +1,4 @@
+Connected to SteamVR � VR controls are visible in your headset.
+Source precision check: {'8bit': 256, '10bit': 1024, 'reference': 4010}
+Run logs: validation\scene-interaction\20260925-202351-908414
+Panel will recenter at the next valid headset pose; motion phase reset.

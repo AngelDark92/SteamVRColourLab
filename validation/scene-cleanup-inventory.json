@@ -1,0 +1,185 @@
+{
+  "utc": "2026-09-25T18:44:34.497223+00:00",
+  "workspace_inventory": [
+    {
+      "path": ".gitignore",
+      "files": 1,
+      "bytes": 71
+    },
+    {
+      "path": ".venv",
+      "files": 1146,
+      "bytes": 36019037
+    },
+    {
+      "path": "__pycache__",
+      "files": 1,
+      "bytes": 39428
+    },
+    {
+      "path": "app.py",
+      "files": 1,
+      "bytes": 23307
+    },
+    {
+      "path": "build",
+      "files": 11008,
+      "bytes": 418205645
+    },
+    {
+      "path": "build_portable_windows.bat",
+      "files": 1,
+      "bytes": 249
+    },
+    {
+      "path": "colourlab",
+      "files": 20,
+      "bytes": 213065
+    },
+    {
+      "path": "dist",
+      "files": 1085,
+      "bytes": 75182039
+    },
+    {
+      "path": "examples",
+      "files": 7,
+      "bytes": 3261
+    },
+    {
+      "path": "LICENSE",
+      "files": 1,
+      "bytes": 1088
+    },
+    {
+      "path": "preview_windows.bat",
+      "files": 1,
+      "bytes": 55
+    },
+    {
+      "path": "README.md",
+      "files": 1,
+      "bytes": 19580
+    },
+    {
+      "path": "requirements.txt",
+      "files": 1,
+      "bytes": 183
+    },
+    {
+      "path": "runs",
+      "files": 8,
+      "bytes": 13283
+    },
+    {
+      "path": "self_test_windows.bat",
+      "files": 1,
+      "bytes": 84
+    },
+    {
+      "path": "SOURCE_SHA256.txt",
+      "files": 1,
+      "bytes": 3572
+    },
+    {
+      "path": "start_windows.bat",
+      "files": 1,
+      "bytes": 1549
+    },
+    {
+      "path": "TEST_RESULTS.md",
+      "files": 1,
+      "bytes": 4677
+    },
+    {
+      "path": "test_windows.bat",
+      "files": 1,
+      "bytes": 292
+    },
+    {
+      "path": "tests",
+      "files": 21,
+      "bytes": 232829
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "files": 1,
+      "bytes": 1839
+    },
+    {
+      "path": "tools",
+      "files": 4,
+      "bytes": 34054
+    },
+    {
+      "path": "validation",
+      "files": 72,
+      "bytes": 699382
+    }
+  ],
+  "nested_git_repositories": [],
+  "source_references": [
+    {
+      "path": "README.md",
+      "sha256": "e77d2bc92e80bfe1831cefd77e67d1f9940cf8626c91f8ceb37f20edf1d6f9a1"
+    },
+    {
+      "path": "tools/Build-Portable.ps1",
+      "sha256": "f18426717f5a2a22cc7315d27120fd93cb96643b50ac90d2f95dcc1913601e87"
+    },
+    {
+      "path": "validation/PORTABLE-VR-VALIDATION.md",
+      "sha256": "080950372b5323cd7cec212f9bc077a1eca8ac364d8a207c996a2d93d892e2c7"
+    },
+    {
+      "path": "validation/SCENE-MENU-FIX-20260925.md",
+      "sha256": "de0e23a8e936c43b81877e10c4b5095304f0f4ecd271b29dedf943a1a80a7d14"
+    }
+  ],
+  "disposable_allowlist_not_executed": [
+    {
+      "path": "build\\portable\\staging-20260925-184456-356",
+      "bytes": 11533774,
+      "classification": "generated PyInstaller output; source and release EXE retained"
+    },
+    {
+      "path": "build\\portable\\staging-20260925-201109-160",
+      "bytes": 11525750,
+      "classification": "generated PyInstaller output; source and release EXE retained"
+    },
+    {
+      "path": "build\\portable\\staging-20260925-203152-923",
+      "bytes": 11558028,
+      "classification": "generated PyInstaller output; source and release EXE retained"
+    },
+    {
+      "path": "build\\portable\\staging-20260925-203818-134",
+      "bytes": 11558481,
+      "classification": "generated PyInstaller output; source and release EXE retained"
+    },
+    {
+      "path": "build\\portable\\staging-20260925-204144-155",
+      "bytes": 11559036,
+      "classification": "generated PyInstaller output; source and release EXE retained"
+    },
+    {
+      "path": "build\\portable\\relocated-check",
+      "bytes": 51718014,
+      "classification": "generated smoke-test extraction; results retained under validation"
+    },
+    {
+      "path": "build\\portable\\relocated-final-021",
+      "bytes": 51728839,
+      "classification": "generated smoke-test extraction; results retained under validation"
+    }
+  ],
+  "bytes_reclaimed": 0,
+  "deferred_reason": "Earlier explicit scoped deletion requests were rejected by automatic approval review (blocked by policy). No alternative deletion mechanism used. Remove only after scoped deletion is permitted.",
+  "retained_exceptions": [
+    "previous-* packages are intact rollback and user-data backups",
+    "build/portable/venv-3.14.0-x64 and license-cache support reproducible builds",
+    ".venv is source development environment",
+    "runs, settings, validation evidence, original source and distributable retained"
+  ],
+  "regenerate": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/Build-Portable.ps1; .venv/Scripts/python.exe -m unittest discover -v"
+}

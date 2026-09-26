@@ -1,0 +1,37 @@
+{
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "graphics": {
+    "vendor": "Mesa",
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "version": "4.5 (Core Profile) Mesa 25.0.7-2",
+    "glsl": "4.50"
+  },
+  "source_precision": {
+    "status": "passed",
+    "scope": "Application source buffer only, before SteamVR/compression/display",
+    "target": "GL_RGBA16F, linear-light RGB, opaque alpha",
+    "size": [
+      4096,
+      8
+    ],
+    "unique_red_levels": {
+      "8bit": 256,
+      "10bit": 1024,
+      "reference": 4010
+    },
+    "maximum_srgb_roundtrip_error": {
+      "8bit": 0.0003137233224206337,
+      "10bit": 0.00031033370392463677,
+      "reference": 0.00031555193317844843
+    },
+    "channel_bits": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  "vr_test_scope": "Mocked API calls only. No headset or SteamVR runtime was used.",
+  "windows_execution": "Not performed"
+}

@@ -1,0 +1,13 @@
+{
+  "package": "dist\\SteamVRColourLab",
+  "files": {
+    "runs/20260925-201501-295299/application.log": "41c8b2603ecfaf1f9c5bb4227efad3a79fda7d529fb34feb663b8b864d15b77f",
+    "runs/20260925-201501-295299/events.jsonl": "0b724cb63f865932332eecbe765809873d1422f2aca530de864b448ccc818082",
+    "runs/20260925-201501-295299/session.json": "3a4fbd02c224341b165bcedae0d82d821763b88b5ab529ed6525beaa6f5f2fd5",
+    "runs/20260925-203428-963253/application.log": "7f8d21b4a2f2e4712e02731dbf1f407d78b199edbc6f9c962476e4985589ee31",
+    "runs/20260925-203428-963253/events.jsonl": "b4c4c10c3ce08601b7005731a0ab7eee61a5f4753f4f0ba019e02eb8abb9bfd3",
+    "runs/20260925-203428-963253/session.json": "707156c8d928c87f36ac34a26e0c153fe04bb5fb326f5d797c8d297667b67ef9"
+  },
+  "file_count": 6,
+  "baseline_commit": "8ae9a5a"
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Galaxy XR Workspace"
+  short_description: "Coordinate host and headset changes safely"
+  default_prompt: "Use $galaxyxr-workspace to plan and validate a cross-project Galaxy XR change."

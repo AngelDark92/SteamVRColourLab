@@ -1,0 +1,57 @@
+usage: SteamVRColourLab.exe [-h] [--desktop] [--config CONFIG]
+                            [--eye-size EYE_SIZE] [--output OUTPUT]
+                            [--settings-dir SETTINGS_DIR] [--no-ui]
+                            [--self-test] [--frames FRAMES]
+
+Native SteamVR colour and source-precision test. No change to streaming
+settings.
+
+options:
+  -h, --help            show this help message and exit
+  --desktop             Preview without connecting to SteamVR; not an end-to-
+                        end test
+  --config CONFIG       Load a saved settings JSON
+  --eye-size EYE_SIZE   Override per-eye render dimensions, e.g. 2048x2048;
+                        otherwise use SteamVR recommendation
+  --output OUTPUT       Folder for local session logs and reports; defaults
+                        beside the executable
+  --settings-dir SETTINGS_DIR
+                        VR save/load folder; defaults to settings beside the
+                        executable
+  --no-ui               Hide desktop controls; VR dashboard and preview
+                        shortcuts remain available
+  --self-test           Validate actual source buffer precision and exit; no
+                        SteamVR required
+  --frames FRAMES       Exit after N loop iterations (smoke tests); 0 runs
+                        until closed
+Source precision check: {'8bit': 256, '10bit': 1024, 'reference': 4010}
+Run logs: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\relocated-check\SteamVRColourLab\runs\20260925-184609-644718
+{
+  "status": "passed",
+  "scope": "Application source buffer only, before SteamVR/compression/display",
+  "target": "GL_RGBA16F, linear-light RGB, opaque alpha",
+  "size": [
+    4096,
+    8
+  ],
+  "unique_red_levels": {
+    "8bit": 256,
+    "10bit": 1024,
+    "reference": 4010
+  },
+  "maximum_srgb_roundtrip_error": {
+    "8bit": 0.0003137233224206337,
+    "10bit": 0.00031033370392463677,
+    "reference": 0.00031555193317844843
+  },
+  "channel_bits": [
+    16,
+    16,
+    16,
+    16
+  ]
+}
+6 RGBA pages rendered; no SteamVR connection
+Source precision check: {'8bit': 256, '10bit': 1024, 'reference': 4010}
+Run logs: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\relocated-check\SteamVRColourLab\runs\20260925-184610-425564
+PASS: relocated ZIP, foreign cwd, restricted PATH, invalid PYTHONHOME/PYTHONPATH; help, GPU precision + dashboard render, desktop Tk/GLFW 8 frames; bundled_runtime=true; all data beside EXE.

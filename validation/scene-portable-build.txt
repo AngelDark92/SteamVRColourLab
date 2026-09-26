@@ -1,0 +1,111 @@
+{"version": "3.14.0", "base": "C:\\Users\\Angelo\\AppData\\Local\\Programs\\Python\\Python314", "executable": "C:\\Users\\Angelo\\AppData\\Local\\Programs\\Python\\Python314\\python.exe"}
+Requirement already satisfied: pyinstaller==6.22.3 in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (6.22.3)
+Requirement already satisfied: glfw==2.10.0 in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (from -r D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\requirements.txt (line 3)) (2.10.0)
+Requirement already satisfied: openvr==2.12.1401 in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (from -r D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\requirements.txt (line 4)) (2.12.1401)
+Requirement already satisfied: Pillow==12.3.0 in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (from -r D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\requirements.txt (line 5)) (12.3.0)
+Requirement already satisfied: altgraph in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (from pyinstaller==6.22.3) (0.17.5)
+Requirement already satisfied: packaging>=22.0 in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (from pyinstaller==6.22.3) (26.3)
+Requirement already satisfied: pefile>=2022.5.30 in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (from pyinstaller==6.22.3) (2024.8.26)
+Requirement already satisfied: pyinstaller-hooks-contrib>=2026.7 in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (from pyinstaller==6.22.3) (2026.7)
+Requirement already satisfied: pywin32-ctypes>=0.2.1 in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (from pyinstaller==6.22.3) (0.2.3)
+Requirement already satisfied: setuptools>=42.0.0 in d:\angelo\desktop\steamlink-galaxyxr-windows-toolkit-full\steamvrcolourlab-source\build\portable\venv-3.14.0-x64\lib\site-packages (from pyinstaller==6.22.3) (84.0.0)
+No broken requirements found.
+115 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.7
+115 INFO: Python: 3.14.0
+134 INFO: Platform: Windows-11-10.0.26200-SP0
+134 INFO: Python environment: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\venv-3.14.0-x64
+135 INFO: wrote D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\staging-20260925-203152-923\SteamVRColourLab.spec
+138 INFO: Removing temporary files and cleaning cache in D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\staging-20260925-203152-923\cache\pyinstaller
+697 INFO: Module search paths (PYTHONPATH):
+['D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source',
+ 'C:\\Users\\Angelo\\AppData\\Local\\Programs\\Python\\Python314\\python314.zip',
+ 'C:\\Users\\Angelo\\AppData\\Local\\Programs\\Python\\Python314\\DLLs',
+ 'C:\\Users\\Angelo\\AppData\\Local\\Programs\\Python\\Python314\\Lib',
+ 'C:\\Users\\Angelo\\AppData\\Local\\Programs\\Python\\Python314',
+ 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64',
+ 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages',
+ 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source']
+927 INFO: Appending 'binaries' from .spec
+927 INFO: Appending 'datas' from .spec
+930 INFO: checking Analysis
+930 INFO: Building Analysis because Analysis-00.toc is non existent
+930 INFO: Looking for Python shared library...
+930 INFO: Using Python shared library: C:\Users\Angelo\AppData\Local\Programs\Python\Python314\python314.dll
+930 INFO: Running Analysis Analysis-00.toc
+930 INFO: Target bytecode optimization level: 0
+930 INFO: Initializing module dependency graph...
+931 INFO: Initializing module graph hook caches...
+938 INFO: Analyzing modules for base_library.zip ...
+2039 INFO: Processing standard module hook 'hook-encodings.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+2356 INFO: Processing standard module hook 'hook-math.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+3258 INFO: Processing standard module hook 'hook-difflib.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+3266 INFO: Processing standard module hook 'hook-heapq.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+3349 INFO: Processing standard module hook 'hook-pickle.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+4318 INFO: Caching module dependency graph...
+4334 INFO: Analyzing D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\app.py
+4364 INFO: Processing standard module hook 'hook-_ctypes.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+4387 INFO: Processing standard module hook 'hook-platform.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+4493 INFO: Processing pre-find-module-path hook 'hook-tkinter.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+4494 INFO: TclTkInfo: initializing cached Tcl/Tk info...
+4793 INFO: Processing standard module hook 'hook-_tkinter.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+4860 INFO: Processing standard module hook 'hook-PIL.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+4940 INFO: Processing standard module hook 'hook-PIL.Image.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+5230 INFO: Processing standard module hook 'hook-xml.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+5245 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+5372 INFO: Processing standard module hook 'hook-PIL.ImageFilter.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+5838 INFO: Analyzing hidden import 'openvr.color_cube_actor'
+5841 INFO: Analyzing hidden import 'openvr.gl_renderer'
+5849 INFO: Analyzing hidden import 'openvr.glframework.cyglfw3_app'
+5852 INFO: Analyzing hidden import 'openvr.glframework.glfw_app'
+5855 INFO: Analyzing hidden import 'openvr.glframework.glmatrix'
+5858 INFO: Analyzing hidden import 'openvr.glframework.glut_app'
+5861 INFO: Analyzing hidden import 'openvr.glframework.qt5_app'
+5865 INFO: Analyzing hidden import 'openvr.glframework.qt_pyside_app'
+5867 INFO: Analyzing hidden import 'openvr.glframework.sdl_app'
+5870 INFO: Analyzing hidden import 'openvr.glframework.wx_app'
+5873 INFO: Analyzing hidden import 'openvr.tracked_devices_actor'
+5880 INFO: Analyzing hidden import 'glfw.GLFW'
+5901 INFO: Processing module hooks (post-graph stage)...
+6118 INFO: Processing standard module hook 'hook-PIL.SpiderImagePlugin.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+6186 INFO: Processing standard module hook 'hook-_tkinter.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks'
+6192 INFO: Performing binary vs. data reclassification (975 entries)
+6336 INFO: Looking for ctypes DLLs
+6403 INFO: Analyzing run-time hooks ...
+6404 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+6405 INFO: Including run-time hook 'pyi_rth__tkinter.py' from 'D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\build\\portable\\venv-3.14.0-x64\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+6419 INFO: Creating base_library.zip...
+6431 INFO: Looking for dynamic libraries
+6614 INFO: Extra DLL search directories (AddDllDirectory): []
+6615 INFO: Extra DLL search directories (PATH): []
+6948 INFO: Warnings written to D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\staging-20260925-203152-923\work\SteamVRColourLab\warn-SteamVRColourLab.txt
+6961 INFO: Graph cross-reference written to D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\staging-20260925-203152-923\work\SteamVRColourLab\xref-SteamVRColourLab.html
+6983 INFO: checking PYZ
+6983 INFO: Building PYZ because PYZ-00.toc is non existent
+6983 INFO: Building PYZ (ZlibArchive) D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\staging-20260925-203152-923\work\SteamVRColourLab\PYZ-00.pyz
+7104 INFO: Building PYZ (ZlibArchive) D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\staging-20260925-203152-923\work\SteamVRColourLab\PYZ-00.pyz completed successfully.
+7110 INFO: checking PKG
+7110 INFO: Building PKG because PKG-00.toc is non existent
+7110 INFO: Building PKG (CArchive) SteamVRColourLab.pkg
+7126 INFO: Building PKG (CArchive) SteamVRColourLab.pkg completed successfully.
+7126 INFO: Bootloader D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\venv-3.14.0-x64\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+7126 INFO: checking EXE
+7127 INFO: Building EXE because EXE-00.toc is non existent
+7127 INFO: Building EXE from EXE-00.toc
+7127 INFO: Copying bootloader EXE to D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\staging-20260925-203152-923\work\SteamVRColourLab\SteamVRColourLab.exe
+7165 INFO: Copying icon to EXE
+7201 INFO: Copying 0 resources to EXE
+7201 INFO: Embedding manifest in EXE
+7235 INFO: Appending PKG archive to EXE
+7274 INFO: Fixing EXE headers
+7461 INFO: Building EXE from EXE-00.toc completed successfully.
+7466 INFO: checking COLLECT
+7466 INFO: Building COLLECT because COLLECT-00.toc is non existent
+7466 INFO: Building COLLECT COLLECT-00.toc
+8302 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+8319 INFO: Build complete! The results are available in: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\staging-20260925-203152-923\dist
+Previous package and any saved data retained: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\previous-20260925-203152-923
+Preserved portable user data: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\dist\SteamVRColourLab\runs
+Built portable package: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\dist\SteamVRColourLab
+Archive: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\dist\SteamVRColourLab-Windows-x64.zip
+SHA256: b9a1a927ad6f0d503f4a66471eb31c8619c53150c377775f33144efdf303062e
+Build staging retained for inspection: D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\SteamVRColourLab-source\build\portable\staging-20260925-203152-923

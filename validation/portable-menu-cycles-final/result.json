@@ -1,0 +1,8 @@
+{
+  "exe": "D:\\Angelo\\Desktop\\SteamLink-GalaxyXR-Windows-Toolkit-FULL\\SteamVRColourLab-source\\dist\\SteamVRColourLab\\SteamVRColourLab.exe",
+  "exe_sha256": "681df3b1aec3b71ec509b739e9ee905de2db9f11fca755b8e761fc95111064f6",
+  "scope": "Real EXE, GPU and SteamVR; synthetic overlay clicks, not physical input",
+  "completed_cycles": 0,
+  "passed": false,
+  "error": "OverlayError_InvalidHandle: "
+}

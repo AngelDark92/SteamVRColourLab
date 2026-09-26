@@ -1,0 +1,21 @@
+usage: SteamVRColourLab.pyz [-h] [--desktop] [--config CONFIG]
+                            [--eye-size EYE_SIZE] [--output OUTPUT] [--no-ui]
+                            [--self-test] [--frames FRAMES]
+
+Native SteamVR colour and source-precision test. No change to streaming
+settings.
+
+options:
+  -h, --help           show this help message and exit
+  --desktop            Preview without connecting to SteamVR; not an end-to-
+                       end test
+  --config CONFIG      Load a saved settings JSON
+  --eye-size EYE_SIZE  Override per-eye render dimensions, e.g. 2048x2048;
+                       otherwise use SteamVR recommendation
+  --output OUTPUT      Folder for local session logs and reports
+  --no-ui              Hide controls; use keyboard shortcuts in the preview
+                       window
+  --self-test          Validate actual source buffer precision and exit; no
+                       SteamVR required
+  --frames FRAMES      Exit after N loop iterations (smoke tests); 0 runs
+                       until closed

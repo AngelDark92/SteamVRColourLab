@@ -1,0 +1,9 @@
+{
+  "release": "v0.3.0",
+  "version": "0.3.0",
+  "source_commit": "a38e9a2194b0ed3ce9f758fb1f0c123ec7879a1b",
+  "sha256": "e44ba9b4f7e9f7d066a25f4a0d9e0d07688c25a1145bdbe427de62a76e6b1f48",
+  "bytes": 23257068,
+  "relocated_help_and_version": "passed",
+  "external_python_on_path": false
+}

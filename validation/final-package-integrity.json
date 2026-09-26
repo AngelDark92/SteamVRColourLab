@@ -1,0 +1,11 @@
+{
+  "exe_sha256": "7a5da401b091908f90d148713fba114ab11d4ceadb35b99550d4e3fcbc0c0d48",
+  "zip_sha256": "b10c0216868c0dbaf0ea917de5298048ea06ec0d7d7d2ec2e4890f3a0cc180c5",
+  "zip_bytes": 23356257,
+  "archive_members": 1077,
+  "archive_integrity": "passed; every member matches package",
+  "source_manifest_files": 45,
+  "preserved_user_files": 6,
+  "archive_user_data": "excluded",
+  "documentation_refreshed_after_live_checks": true
+}
