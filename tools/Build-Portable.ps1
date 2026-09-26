@@ -1,7 +1,9 @@
 [CmdletBinding()]
 param(
     # Build machine only. The resulting package does not need installed Python.
-    [string]$Python = ''
+    [string]$Python = '',
+    # Keep this run's staging/previous package for diagnosis.
+    [switch]$KeepBuildFiles
 )
 
 Set-StrictMode -Version Latest
@@ -12,35 +14,11 @@ $distRoot = Join-Path $repoRoot 'dist'
 $packagePath = Join-Path $distRoot 'SteamVRColourLab'
 $zipPath = Join-Path $distRoot 'SteamVRColourLab-Windows-x64.zip'
 $hashPath = "$zipPath.sha256"
+$cleanupRecord = Join-Path $buildRoot 'last-cleanup.json'
 # Official PyPI 6.22.3 supports CPython 3.8-3.15, including Python 3.14.
 $pyInstallerVersion = '6.22.3'
 
-function Assert-OwnedPath {
-    param([string]$Path, [string]$Root, [switch]$InspectTree)
-    $resolvedRoot = [IO.Path]::GetFullPath($Root).TrimEnd('\')
-    $resolvedPath = [IO.Path]::GetFullPath($Path).TrimEnd('\')
-    if (-not $resolvedPath.StartsWith("$resolvedRoot\", [StringComparison]::OrdinalIgnoreCase)) {
-        throw "Refusing a path outside the owned directory: $resolvedPath"
-    }
-    # Check every existing ancestor, so an output directory cannot redirect writes.
-    $cursor = $resolvedPath
-    while ($cursor.Length -ge $resolvedRoot.Length) {
-        if (Test-Path -LiteralPath $cursor) {
-            $item = Get-Item -Force -LiteralPath $cursor
-            if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
-                throw "Refusing a junction or symbolic link: $cursor"
-            }
-        }
-        if ($cursor -eq $resolvedRoot) { break }
-        $cursor = Split-Path -Parent $cursor
-    }
-    if ($InspectTree -and (Test-Path -LiteralPath $resolvedPath -PathType Container)) {
-        $linked = Get-ChildItem -Force -Recurse -LiteralPath $resolvedPath |
-            Where-Object { ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 } |
-            Select-Object -First 1
-        if ($linked) { throw "Refusing a tree containing a link: $($linked.FullName)" }
-    }
-}
+. (Join-Path $PSScriptRoot 'Portable-Cleanup.ps1')
 
 function Invoke-Checked {
     param([string]$Executable, [string[]]$Arguments)
@@ -52,6 +30,8 @@ function Invoke-Checked {
 
 $oldLocation = Get-Location
 $oldPyInstallerCache = $env:PYINSTALLER_CONFIG_DIR
+$previousPackage = $null
+$previousManifest = @{}
 try {
     if ($env:OS -ne 'Windows_NT') { throw 'Build the Windows package on Windows.' }
     Set-Location -LiteralPath $repoRoot
@@ -65,7 +45,7 @@ try {
     if (-not (Test-Path -LiteralPath (Join-Path $repoRoot 'examples') -PathType Container)) {
         throw 'Required examples directory is missing.'
     }
-    foreach ($path in @($buildRoot, $distRoot, $packagePath, $zipPath, $hashPath)) {
+    foreach ($path in @($buildRoot, $distRoot, $packagePath, $zipPath, $hashPath, $cleanupRecord)) {
         Assert-OwnedPath -Path $path -Root $repoRoot
     }
 
@@ -229,13 +209,14 @@ for filename, url, expected_hash in native_notices:
     $buildRecord | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $stagedPackage 'BUILD_INFO.json') -Encoding UTF8
 
     New-Item -ItemType Directory -Path $distRoot -Force | Out-Null
-    # Retain the old folder, including any settings and session reports it holds.
+    # Keep the old folder until the new archive and user-data copy succeed.
     if (Test-Path -LiteralPath $packagePath) {
         Assert-OwnedPath -Path $packagePath -Root $distRoot -InspectTree
+        $previousManifest = Get-PortableArchiveManifest -ZipPath $zipPath -HashPath $hashPath
         $previousPackage = Join-Path $buildRoot "previous-$stamp"
         Assert-OwnedPath -Path $previousPackage -Root $buildRoot
         Move-Item -LiteralPath $packagePath -Destination $previousPackage
-        Write-Host "Previous package and any saved data retained: $previousPackage"
+        Write-Host "Temporary previous-package backup: $previousPackage"
     }
     Assert-OwnedPath -Path $stagedPackage -Root $staging -InspectTree
     Assert-OwnedPath -Path $packagePath -Root $distRoot
@@ -245,8 +226,8 @@ for filename, url, expected_hash in native_notices:
     $hash = (Get-FileHash -LiteralPath $zipPath -Algorithm SHA256).Hash.ToLowerInvariant()
     Set-Content -LiteralPath $hashPath -Value "$hash  $([IO.Path]::GetFileName($zipPath))" -Encoding Ascii
     # Restore portable user data only after creating the clean distributable ZIP.
-    # The prior package remains an intact backup; never copy user data into ZIP.
-    if (Get-Variable -Name previousPackage -ErrorAction SilentlyContinue) {
+    # Never copy user data into the distributable ZIP.
+    if ($previousPackage) {
         foreach ($dataName in @('runs', 'settings')) {
             $sourceData = Join-Path $previousPackage $dataName
             if (Test-Path -LiteralPath $sourceData -PathType Container) {
@@ -258,10 +239,23 @@ for filename, url, expected_hash in native_notices:
             }
         }
     }
+    # Run only after ZIP creation, checksum and user-data restoration succeed.
+    # Failure paths retain staging and the previous package for recovery.
+    if ($KeepBuildFiles) {
+        Write-Host "Build files retained by -KeepBuildFiles: $staging"
+    } else {
+        $env:PYINSTALLER_CONFIG_DIR = $oldPyInstallerCache
+        $cleanup = Clear-PortableBuildFiles -Staging $staging -PreviousPackage $previousPackage -PackagePath $packagePath -BuildRoot $buildRoot -DistRoot $distRoot -PreviousManifest $previousManifest
+        Assert-OwnedPath -Path $cleanupRecord -Root $buildRoot
+        $cleanup | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $cleanupRecord -Encoding UTF8
+        Write-Host "Build cleanup reclaimed $($cleanup.RemovedBytes) bytes in $($cleanup.RemovedFiles) files."
+        if ($cleanup.RetainedPrevious) {
+            Write-Host "Unverified or modified previous files retained: $($cleanup.RetainedPrevious)"
+        }
+    }
     Write-Host "Built portable package: $packagePath"
     Write-Host "Archive: $zipPath"
     Write-Host "SHA256: $hash"
-    Write-Host "Build staging retained for inspection: $staging"
 } catch {
     Write-Error -Message $_ -ErrorAction Continue
     exit 1

@@ -67,6 +67,8 @@ jobs:
           python-version: '3.13'
           architecture: x64
           cache: pip
+      - name: Test Windows cleanup and data preservation
+        run: python -m unittest tests.test_build_cleanup -v
       - name: Stamp and build portable package
         run: |
           python tools/release_policy.py --output build/release-plan.json --stamp

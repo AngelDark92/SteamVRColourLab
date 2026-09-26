@@ -357,10 +357,26 @@ isolated build environment, checks dependencies, and produces:
 - `dist/SteamVRColourLab/SteamVRColourLab.exe` plus its runtime and launchers.
 - `dist/SteamVRColourLab-Windows-x64.zip` and its `.sha256` checksum.
 
-An existing output folder is retained under `build/portable/previous-*`.
-Its `runs` and `settings` are also restored into the new local package after
-creating the clean distributable ZIP, so personal data is not included in it. Build staging is retained for diagnosis and may be
-removed after verification; keep the `venv-*` build environment for reuse.
+An existing output folder is temporarily moved under `build/portable/previous-*`.
+Its `runs` and `settings` are restored into the new local package after creating
+the clean distributable ZIP, so personal data is not included in the download.
+After success, the script removes this run's staging files. It also removes old
+generated files only when they match the previous ZIP and its verified checksum.
+Copied user files are removed from the temporary backup only after their new
+copies match byte for byte. Modified or unknown files remain in the backup.
+
+Failed builds retain their working files for diagnosis. Pass `-KeepBuildFiles`
+to retain them after a successful build too. The last automatic cleanup result
+is saved in `build/portable/last-cleanup.json`.
+
+The script keeps dependency environments (`build/portable/venv-*`) and the small
+license cache for faster rebuilds. You can remove these when no build is running;
+the next build recreates them and needs network access. Old `staging-*` folders
+are also disposable once any failure investigation is finished. Historical
+`previous-*` folders and extracted validation copies may contain saved settings,
+reports or manually added files: preserve those before deleting the folders.
+Automatic cleanup touches only the staging and previous-package paths created
+by the current run, not historical backups or the current `dist` output.
 The resulting executable is unsigned. See `TEST_RESULTS.md` for the exact
 local checks and remaining headset validation. The legacy `.pyz` is still a
 source/developer format and requires separately installed Python/dependencies.
