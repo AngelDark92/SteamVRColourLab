@@ -13,6 +13,8 @@ description: >
 
 Compress natural language files (CLAUDE.md, todos, preferences) into caveman-speak to reduce input tokens. Compressed version overwrites original. Human-readable backup saved as `<filename>.original.md`, but NOT beside the source file — it lives in an out-of-tree data dir (`$XDG_DATA_HOME/caveman-compress/backups/<parent-dir-name>/`, or `%LOCALAPPDATA%\caveman-compress\backups\<parent-dir-name>\` on Windows) so skill auto-loaders don't re-ingest it as a live file.
 
+**Hermes:** the Hermes agent compresses the file itself — no `ANTHROPIC_API_KEY` and no `claude` CLI needed. Read with `read_file`, compress the prose, write the backup first, then the file; validate that headings, code blocks, inline code, URLs, and paths survived byte-for-byte. The host-specific mechanics (Hermes path, fallback script behavior, model note, which context file Hermes actually loads) are in [references/hermes-usage.md](references/hermes-usage.md).
+
 ## Trigger
 
 `/caveman-compress <filepath>` or when user asks to compress a memory file.

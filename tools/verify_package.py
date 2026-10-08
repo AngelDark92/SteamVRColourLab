@@ -67,7 +67,8 @@ def smoke_executable(archive: Path, version: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--archive', type=Path, default=Path('dist/SteamVRColourLab-Windows-x64.zip'))
+    output_root = Path(os.environ.get('COLOURLAB_OUTPUT_ROOT') or Path(__file__).resolve().parents[2] / 'builds' / 'SteamVRColourLab')
+    parser.add_argument('--archive', type=Path, default=output_root / 'dist' / 'SteamVRColourLab-Windows-x64.zip')
     parser.add_argument('--plan', type=Path, required=True)
     args = parser.parse_args()
     plan = json.loads(args.plan.read_text(encoding='utf-8'))

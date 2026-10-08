@@ -27,7 +27,7 @@ def publish(artifacts: Path) -> None:
     # Refresh tags after the potentially long build, then recompute the plan.
     # A conflicting tag or rerun of an older commit must never move a release.
     run('git', 'fetch', 'origin', '--tags')
-    fresh = json.loads(run(sys.executable, 'tools/release_policy.py', '--output', 'build/publish-plan.json'))
+    fresh = json.loads(run(sys.executable, 'tools/release_policy.py', '--output', str(artifacts / 'build/publish-plan.json')))
     if fresh['version'] != plan['version']:
         raise ValueError('Release version changed during the build; rerun the workflow')
     known_tags = run('git', 'tag', '--list', 'v*').splitlines()

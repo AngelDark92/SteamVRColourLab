@@ -9,7 +9,7 @@ through SteamVR, with repeatable settings and controls inside VR.
 
 ## Portable Windows package
 
-Extract `dist/SteamVRColourLab-Windows-x64.zip` to a writable local folder and
+Extract `../builds/SteamVRColourLab/dist/SteamVRColourLab-Windows-x64.zip` to a writable local folder and
 run **SteamVRColourLab.exe** (or `start_windows.bat`). Keep the entire extracted
 folder together, including `_internal`. The package includes Python, Tcl/Tk,
 OpenVR, GLFW and Pillow: **no Python installation, pip, internet access or
@@ -239,9 +239,9 @@ SteamVRColourLab.exe --self-test
 Developers running from source need full 64-bit Python 3.11 or newer with tkinter and pip:
 
 ```bat
-py -3 -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements.txt
-.venv\Scripts\python.exe app.py
+py -3 -m venv ..\builds\SteamVRColourLab\.venv
+..\builds\SteamVRColourLab\.venv\Scripts\python.exe -m pip install -r requirements.txt
+..\builds\SteamVRColourLab\.venv\Scripts\python.exe app.py
 ```
 
 `--no-ui` hides only the desktop controls; the VR dashboard remains available.
@@ -326,8 +326,8 @@ prove GPU precision or headset interaction; those still require the local
 On Windows, with dependencies installed and a local graphics session:
 
 ```bat
-.venv\Scripts\python.exe -m unittest discover -v
-.venv\Scripts\python.exe app.py --self-test
+..\builds\SteamVRColourLab\.venv\Scripts\python.exe -m unittest discover -v
+..\builds\SteamVRColourLab\.venv\Scripts\python.exe app.py --self-test
 ```
 
 On a Linux development host, the tests use Mesa/EGL for the real renderer and
@@ -340,7 +340,7 @@ xvfb-run -a python -m unittest discover -v
 Build the `.pyz` with the included standard-library build tool:
 
 ```bat
-.venv\Scripts\python.exe tools\build_zipapp.py
+..\builds\SteamVRColourLab\.venv\Scripts\python.exe tools\build_zipapp.py
 ```
 
 Build the portable Windows application with:
@@ -349,15 +349,21 @@ Build the portable Windows application with:
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/Build-Portable.ps1
 ```
 
+All build files and packages default to `../builds/SteamVRColourLab`, outside the source
+checkout. The `.pyz` builder uses the same location. Set `COLOURLAB_OUTPUT_ROOT`
+to another external directory, or pass `-OutputRoot` to the PowerShell builder.
+GitHub Actions uses the same layout beside its checkout. Source launchers and
+tests use the shared `.venv` and suppress source bytecode caches.
+
 Or double-click `build_portable_windows.bat`. The build machine needs full x64
 Python with tkinter and pip and network access to install pinned dependencies.
 Use `-Python C:\path\to\python.exe` to select it explicitly. The script uses an
 isolated build environment, checks dependencies, and produces:
 
-- `dist/SteamVRColourLab/SteamVRColourLab.exe` plus its runtime and launchers.
-- `dist/SteamVRColourLab-Windows-x64.zip` and its `.sha256` checksum.
+- `../builds/SteamVRColourLab/dist/SteamVRColourLab/SteamVRColourLab.exe` plus its runtime and launchers.
+- `../builds/SteamVRColourLab/dist/SteamVRColourLab-Windows-x64.zip` and its `.sha256` checksum.
 
-An existing output folder is temporarily moved under `build/portable/previous-*`.
+An existing output folder is temporarily moved under `../builds/SteamVRColourLab/build/portable/previous-*`.
 Its `runs` and `settings` are restored into the new local package after creating
 the clean distributable ZIP, so personal data is not included in the download.
 After success, the script removes this run's staging files. It also removes old
@@ -367,16 +373,16 @@ copies match byte for byte. Modified or unknown files remain in the backup.
 
 Failed builds retain their working files for diagnosis. Pass `-KeepBuildFiles`
 to retain them after a successful build too. The last automatic cleanup result
-is saved in `build/portable/last-cleanup.json`.
+is saved in `../builds/SteamVRColourLab/build/portable/last-cleanup.json`.
 
-The script keeps dependency environments (`build/portable/venv-*`) and the small
+The script keeps dependency environments (`../builds/SteamVRColourLab/build/portable/venv-*`) and the small
 license cache for faster rebuilds. You can remove these when no build is running;
 the next build recreates them and needs network access. Old `staging-*` folders
 are also disposable once any failure investigation is finished. Historical
 `previous-*` folders and extracted validation copies may contain saved settings,
 reports or manually added files: preserve those before deleting the folders.
 Automatic cleanup touches only the staging and previous-package paths created
-by the current run, not historical backups or the current `dist` output.
+by the current run, not historical backups or the current external `dist` output.
 The resulting executable is unsigned. See `TEST_RESULTS.md` for the exact
 local checks and remaining headset validation. The legacy `.pyz` is still a
 source/developer format and requires separately installed Python/dependencies.

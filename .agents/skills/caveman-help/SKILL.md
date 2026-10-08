@@ -49,6 +49,11 @@ Default mode = `full`. Change it:
 export CAVEMAN_DEFAULT_MODE=ultra
 ```
 
+**Hermes:** there is no caveman hook on this host and no auto-activation, so
+`CAVEMAN_DEFAULT_MODE` and a `config.json` are not read. Caveman runs only from
+the loaded `caveman` skill — invoke `/caveman [level]`, and the model applies the
+level. No mode persists as a flag file.
+
 **Config file** (`~/.config/caveman/config.json` macOS/Linux, `%APPDATA%\caveman\config.json` Windows):
 ```json
 { "defaultMode": "lite" }

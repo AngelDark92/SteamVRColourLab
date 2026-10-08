@@ -143,7 +143,7 @@ class PublishReleaseTests(ArtifactFixture):
             return self.head
         if args == ("git", "fetch", "origin", "--tags"):
             return ""
-        if args == (sys.executable, "tools/release_policy.py", "--output", "build/publish-plan.json"):
+        if args == (sys.executable, "tools/release_policy.py", "--output", str(self.artifacts / "build/publish-plan.json")):
             return json.dumps(self.fresh_plan)
         if args == ("git", "tag", "--list", "v*"):
             return "\n".join(self.known_tags)

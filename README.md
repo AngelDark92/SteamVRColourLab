@@ -7,6 +7,30 @@ Colour Lab gives you gradients, dark colours and 8-bit/10-bit comparisons to
 help you see it—and compare the results when you change your streaming settings.
 You can control everything from inside VR.
 
+## Agent instructions
+
+This repository carries instruction files for several agent hosts. Each host reads
+a different subset:
+
+| Host | Reads | Ignores |
+| --- | --- | --- |
+| **Hermes** | `AGENTS.md`, `.agents/AGENTS.md`, `.agents/skills/` when the checkout is trusted | `.github/agents/`, `.codex/` |
+| **Codex / Copilot** | `.github/agents/`, `.codex/` | `AGENTS.md` skills mechanics |
+| **Claude Code** | `CLAUDE.md` | Hermes `delegate_task` notes |
+
+Before first use from Hermes, trust the checkout once so the project skills in
+`.agents/skills/` load:
+
+```sh
+hermes skills trust
+```
+
+Delegated work from Hermes uses the `delegate_task` tool, not the Codex
+`cavecrew-*` presets. Paste the role contract from
+[`.agents/skills/cavecrew/references/hermes-role-contracts.md`](.agents/skills/cavecrew/references/hermes-role-contracts.md)
+into each child's `context`. Generated build files, packages and logs always go
+to `../builds/SteamVRColourLab`, outside the checkout.
+
 **[Download for Windows](https://github.com/AngelDark92/SteamVRColourLab/releases/latest/download/SteamVRColourLab-Windows-x64.zip)**
 
 Windows 64-bit · SteamVR · No Python installation needed

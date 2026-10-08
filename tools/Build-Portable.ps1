@@ -2,6 +2,8 @@
 param(
     # Build machine only. The resulting package does not need installed Python.
     [string]$Python = '',
+    # Shared output directory outside the source checkout; CI may override it.
+    [string]$OutputRoot = $env:COLOURLAB_OUTPUT_ROOT,
     # Keep this run's staging/previous package for diagnosis.
     [switch]$KeepBuildFiles
 )
@@ -9,8 +11,15 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$buildRoot = Join-Path $repoRoot 'build\portable'
-$distRoot = Join-Path $repoRoot 'dist'
+if (-not $OutputRoot) { $OutputRoot = Join-Path (Split-Path -Parent $repoRoot) 'builds\SteamVRColourLab' }
+$outputRootPath = [IO.Path]::GetFullPath($OutputRoot).TrimEnd('\', '/')
+if ($outputRootPath -eq $repoRoot -or
+    $outputRootPath.StartsWith("$repoRoot$([IO.Path]::DirectorySeparatorChar)", [StringComparison]::OrdinalIgnoreCase) -or
+    $repoRoot.StartsWith("$outputRootPath$([IO.Path]::DirectorySeparatorChar)", [StringComparison]::OrdinalIgnoreCase)) {
+    throw 'OutputRoot must be outside the source checkout and must not contain it.'
+}
+$buildRoot = Join-Path $outputRootPath 'build\portable'
+$distRoot = Join-Path $outputRootPath 'dist'
 $packagePath = Join-Path $distRoot 'SteamVRColourLab'
 $zipPath = Join-Path $distRoot 'SteamVRColourLab-Windows-x64.zip'
 $hashPath = "$zipPath.sha256"
@@ -30,11 +39,13 @@ function Invoke-Checked {
 
 $oldLocation = Get-Location
 $oldPyInstallerCache = $env:PYINSTALLER_CONFIG_DIR
+$oldDontWriteBytecode = $env:PYTHONDONTWRITEBYTECODE
 $previousPackage = $null
 $previousManifest = @{}
 try {
     if ($env:OS -ne 'Windows_NT') { throw 'Build the Windows package on Windows.' }
     Set-Location -LiteralPath $repoRoot
+    $env:PYTHONDONTWRITEBYTECODE = '1'
     $requiredFiles = @('app.py', 'requirements.txt', 'README.md', 'TECHNICAL_REFERENCE.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'TEST_RESULTS.md')
     foreach ($name in $requiredFiles) {
         if (-not (Test-Path -LiteralPath (Join-Path $repoRoot $name) -PathType Leaf)) {
@@ -46,14 +57,14 @@ try {
         throw 'Required examples directory is missing.'
     }
     foreach ($path in @($buildRoot, $distRoot, $packagePath, $zipPath, $hashPath, $cleanupRecord)) {
-        Assert-OwnedPath -Path $path -Root $repoRoot
+        Assert-OwnedPath -Path $path -Root $outputRootPath
     }
 
     $pythonArgs = @()
     if ($Python) {
         $pythonCommand = (Get-Command -Name $Python -CommandType Application -ErrorAction Stop).Source
-    } elseif (Test-Path -LiteralPath (Join-Path $repoRoot '.venv\Scripts\python.exe')) {
-        $pythonCommand = Join-Path $repoRoot '.venv\Scripts\python.exe'
+    } elseif (Test-Path -LiteralPath (Join-Path $outputRootPath '.venv\Scripts\python.exe')) {
+        $pythonCommand = Join-Path $outputRootPath '.venv\Scripts\python.exe'
     } elseif (Get-Command -Name 'py.exe' -CommandType Application -ErrorAction SilentlyContinue) {
         $pythonCommand = (Get-Command -Name 'py.exe' -CommandType Application).Source
         $pythonArgs = @('-3')
@@ -261,5 +272,6 @@ for filename, url, expected_hash in native_notices:
     exit 1
 } finally {
     $env:PYINSTALLER_CONFIG_DIR = $oldPyInstallerCache
+    $env:PYTHONDONTWRITEBYTECODE = $oldDontWriteBytecode
     Set-Location -LiteralPath $oldLocation.Path
 }

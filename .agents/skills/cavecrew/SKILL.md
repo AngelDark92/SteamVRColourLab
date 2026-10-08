@@ -27,6 +27,27 @@ Cavecrew = three subagent presets that emit caveman output. Same job as Anthropi
 
 Rule of thumb: **if you'd want the subagent's output in 1/3 the tokens, pick cavecrew. If you'd want prose, pick vanilla.**
 
+## SteamVRColourLab project instructions
+
+Give delegated agents the repository's [AGENTS.md](../../../AGENTS.md) and the
+[build skill](../steamvrcolourlab-build/SKILL.md) when building, packaging,
+testing, or inspecting output paths. All generated outputs and logs belong in
+`../builds/SteamVRColourLab` relative to the repository root, including its
+`build/`, `dist/`, and `.venv/` subfolders. On this workstation this is
+`D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\builds\SteamVRColourLab`.
+Never interpret the placeholder `project` as a literal directory name or
+create generated build folders inside this checkout.
+
+## Under Hermes (delegate_task, not presets)
+
+Hermes does not read `.github/agents/` and has no named agent presets. `cavecrew-investigator`,
+`cavecrew-builder`, and `cavecrew-reviewer` run as `delegate_task` children: paste the matching
+role contract from [references/hermes-role-contracts.md](references/hermes-role-contracts.md)
+verbatim into each child's `context`, with the goal and every path. Children inherit the parent's
+tools (no per-child tool list) and model (no `haiku` pin), and cannot call `clarify` — keep the
+`ambiguous. ask:` terminal line. A child's summary is a self-report: the parent re-reads the cited
+lines and runs the tests itself before trusting a receipt.
+
 ## Why this exists (the real win)
 
 Subagent tool results get injected into main context verbatim. A vanilla `Explore` that returns 2k tokens of prose costs 2k tokens of main-context budget every time. The same finding from `cavecrew-investigator` returns ~700 tokens. Across 20 delegations in one session that's the difference between context exhaustion and finishing the task.
