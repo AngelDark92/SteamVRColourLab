@@ -19,8 +19,10 @@ Suppress source bytecode with `-B` or `PYTHONDONTWRITEBYTECODE=1`.
 Build from the repository root with `tools/Build-Portable.ps1` or
 `build_portable_windows.bat`. Build the Python archive with
 `python -B tools/build_zipapp.py`. Verify packages with `tools/verify_package.py`
-and the matching external plan. Run local tests with
-`..\builds\SteamVRColourLab\.venv\Scripts\python.exe -B -m unittest discover -v`.
+and the matching external plan. Run the full suite with `test_windows.bat` (or
+`..\builds\SteamVRColourLab\.venv\Scripts\python.exe -B -m unittest discover -v`)
+at the end of every task; hosted CI no longer repeats it, so this suite and
+`.githooks/pre-push` (`git config core.hooksPath .githooks`) are the release gate.
 
 Keep PowerShell, Python, batch launchers, documentation, CI and checksum records
 consistent after changing paths. CI uses the same named folder beside its

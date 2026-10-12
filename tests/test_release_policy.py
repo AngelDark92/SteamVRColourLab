@@ -162,7 +162,10 @@ class ReleasePolicyTests(unittest.TestCase):
     def test_shallow_history_is_rejected(self):
         self.commit("fix: later change")
         shallow = self.root / "shallow"
-        self.git("clone", "--depth=1", self.repo.as_uri(), str(shallow))
+        # --no-local forces a real shallow clone; clone --depth over a file:// URI
+        # is rejected by some Git for Windows builds, and a plain local path would
+        # silently ignore --depth.
+        self.git("clone", "--depth=1", "--no-local", str(self.repo), str(shallow))
         with self.assertRaisesRegex(ReleasePolicyError, "Full Git history"):
             release_plan(shallow)
 

@@ -15,49 +15,23 @@ permissions:
 
 # Serialize main releases. Pending runs may coalesce; versioning includes every
 # commit since the last successful tag, so their version intent is preserved.
+# Superseded pull request runs are cancelled to keep the queue short.
 concurrency:
   group: build-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+# The full unittest suite is the local push gate (.githooks/pre-push and
+# test_windows.bat; see AGENTS.md), so hosted runners no longer repeat it. CI
+# keeps the cleanup and version-integrity checks the portable build depends on,
+# then builds, verifies and publishes the exact commit it was given.
 jobs:
-  test:
-    name: Tests and version
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
+  windows:
+    name: Portable Windows x64
+    runs-on: windows-2022
+    timeout-minutes: 30
     outputs:
       version: ${{ steps.version.outputs.version }}
       release: ${{ steps.version.outputs.release }}
-    env:
-      LIBGL_ALWAYS_SOFTWARE: '1'
-      EGL_PLATFORM: surfaceless
-    steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version: '3.13'
-          cache: pip
-      - name: Install renderer and UI dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libegl1 libgl1-mesa-dri libglx-mesa0 xvfb xauth python3-tk
-          python -m pip install -r requirements.txt
-          python -m pip check
-      - name: Run all tests with real software rendering
-        run: xvfb-run -a python -m unittest discover -v
-      - name: Calculate version
-        id: version
-        run: python tools/release_policy.py --output "$COLOURLAB_OUTPUT_ROOT/build/release-plan.json" --github-output "$GITHUB_OUTPUT"
-
-  windows:
-    name: Portable Windows x64
-    needs: test
-    runs-on: windows-2022
-    timeout-minutes: 30
-    env:
-      EXPECTED_VERSION: ${{ needs.test.outputs.version }}
     defaults:
       run:
         shell: pwsh
@@ -73,19 +47,20 @@ jobs:
           cache: pip
       - name: Test Windows cleanup and data preservation
         run: python -m unittest tests.test_build_cleanup -v
-      - name: Stamp and build portable package
+      - name: Calculate and stamp release version
+        id: version
         run: |
-          python tools/release_policy.py --output "$env:COLOURLAB_OUTPUT_ROOT/build/release-plan.json" --stamp
+          python tools/release_policy.py --output "$env:COLOURLAB_OUTPUT_ROOT/build/release-plan.json" --stamp --github-output "$env:GITHUB_OUTPUT"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          $plan = Get-Content "$env:COLOURLAB_OUTPUT_ROOT/build/release-plan.json" -Raw | ConvertFrom-Json
-          if ($plan.version -ne $env:EXPECTED_VERSION) { throw 'Version changed after tests; rerun this workflow.' }
+      - name: Build portable package
+        run: |
           ./tools/Build-Portable.ps1 -Python (Get-Command python).Source
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Check ZIP, checksum, metadata and relocated executable
         run: python tools/verify_package.py --plan "$env:COLOURLAB_OUTPUT_ROOT/build/release-plan.json"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: SteamVRColourLab-${{ needs.test.outputs.version }}-Windows-x64
+          name: SteamVRColourLab-${{ steps.version.outputs.version }}-Windows-x64
           path: |
             ${{ env.COLOURLAB_OUTPUT_ROOT }}/dist/SteamVRColourLab-Windows-x64.zip
             ${{ env.COLOURLAB_OUTPUT_ROOT }}/dist/SteamVRColourLab-Windows-x64.zip.sha256
@@ -96,8 +71,8 @@ jobs:
 
   release:
     name: Publish verified release
-    needs: [test, windows]
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && needs.test.outputs.release == 'true'
+    needs: windows
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && needs.windows.outputs.release == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -111,7 +86,7 @@ jobs:
           python-version: '3.13'
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          name: SteamVRColourLab-${{ needs.test.outputs.version }}-Windows-x64
+          name: SteamVRColourLab-${{ needs.windows.outputs.version }}-Windows-x64
           path: ${{ env.COLOURLAB_OUTPUT_ROOT }}/release-artifacts
       - name: Publish exact tested commit
         env:

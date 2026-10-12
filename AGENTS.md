@@ -24,6 +24,21 @@ Preserve saved `runs` and `settings`, unknown files in previous packages, and
 historical validation evidence during cleanup. Validate resolved paths and
 reject junctions/symlinks before moving or deleting generated trees.
 
+## Local test gate
+
+Hosted CI no longer runs the unit suite; it only checks the build-integrity
+pieces, then builds, verifies and publishes the release package. Run the full
+suite locally from the repository root before reporting any task done:
+
+```bat
+test_windows.bat
+```
+
+`git config core.hooksPath .githooks` (once per clone) makes
+[.githooks/pre-push](.githooks/pre-push) run the same suite before every push;
+a failing suite blocks the push. `git push --no-verify` skips it and CI will
+not catch the regression. Report the `Ran N tests` / `OK` lines with the result.
+
 ## Agent host setup
 
 This repository carries instruction files for several agent hosts. Each host

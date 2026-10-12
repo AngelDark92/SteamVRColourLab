@@ -286,11 +286,14 @@ quality or bit depth. Inspect the actual headset scene.
 [Build status](https://github.com/AngelDark92/SteamVRColourLab/actions/workflows/build.yml)
 and [Windows downloads](https://github.com/AngelDark92/SteamVRColourLab/releases/latest).
 
-Every branch push and pull request runs the complete test suite on Linux with
-Mesa software rendering and Xvfb, then builds the portable Windows x64 ZIP on
-Windows. You can also use **Actions → Build and release → Run workflow**.
-The workflow installs all build dependencies; no personal computer or custom
-GitHub secret is needed. Branch and PR builds are downloadable workflow artifacts.
+Every branch push and pull request builds the portable Windows x64 ZIP on
+Windows, verifies it, and uploads it as a workflow artifact. You can also use
+**Actions → Build and release → Run workflow**. The workflow installs all build
+dependencies; no personal computer or custom GitHub secret is needed.
+
+The unit suite runs locally instead of on hosted runners: run `test_windows.bat`
+at the end of every task, and `.githooks/pre-push` (enable once per clone with
+`git config core.hooksPath .githooks`) blocks a push whose suite fails.
 
 Successful builds on `main` automatically tag and publish a GitHub release when
 commit subjects since the previous version contain one of these prefixes:
@@ -303,8 +306,8 @@ commit subjects since the previous version contain one of these prefixes:
 
 Scopes such as `fix(ui): ...` also work. The highest requested bump wins once
 per release (`rework` > `feat` > `fix`), including commits accumulated after a
-failed or superseded build. Other prefixes still build and test but do not
-create a new version. Only subjects count; prose in a commit body does not.
+failed or superseded build. Other prefixes still build but do not create a new
+version. Only subjects count; prose in a commit body does not.
 For squash merges, put the intended prefix in the final squash commit title.
 
 Tags `vX.Y.Z` are the release version record; the initial baseline is `0.2.1`.
@@ -331,7 +334,8 @@ On Windows, with dependencies installed and a local graphics session:
 ```
 
 On a Linux development host, the tests use Mesa/EGL for the real renderer and
-Tk/Xvfb for controls. They do not need SteamVR; install `requirements.txt` first:
+Tk/Xvfb for controls (hosted CI no longer runs this). They do not need SteamVR;
+install `requirements.txt` first:
 
 ```sh
 xvfb-run -a python -m unittest discover -v

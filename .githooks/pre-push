@@ -1,0 +1,16 @@
+#!/bin/sh
+# Local push gate: run the full suite before code leaves this machine.
+# Install once per clone: git config core.hooksPath .githooks
+# Bypass deliberately (CI no longer repeats the suite): git push --no-verify
+set -e
+cd "$(git rev-parse --show-toplevel)"
+output_root="${COLOURLAB_OUTPUT_ROOT:-$(cd .. && pwd)/builds/SteamVRColourLab}"
+python="$output_root/.venv/Scripts/python.exe"
+[ -x "$python" ] || python="$output_root/.venv/bin/python"
+if [ ! -x "$python" ]; then
+    echo "pre-push: no test environment at $output_root/.venv" >&2
+    echo "pre-push: run start_windows.bat once, or set COLOURLAB_OUTPUT_ROOT." >&2
+    exit 1
+fi
+echo "pre-push: full test suite with $python"
+PYTHONDONTWRITEBYTECODE=1 "$python" -B -m unittest discover

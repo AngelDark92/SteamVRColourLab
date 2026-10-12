@@ -1,0 +1,2 @@
+# Hook scripts must stay LF in every clone; CRLF breaks the shebang elsewhere.
+.githooks/* text eol=lf
