@@ -27,6 +27,11 @@ at the end of every task; hosted CI no longer repeats it, so this suite and
 Keep PowerShell, Python, batch launchers, documentation, CI and checksum records
 consistent after changing paths. CI uses the same named folder beside its
 checkout; upload and download the existing `build/` + `dist/` artifact layout.
+`actions/upload-artifact` rejects any pattern outside the workspace
+(`Relative pathing '.' and '..' is not allowed`), so the build job copies the
+ZIP, its checksum and the plan into a workspace `ci-artifacts/` folder and the
+publisher reads that folder. Keep external output paths out of artifact
+patterns.
 `COLOURLAB_OUTPUT_ROOT` and PowerShell `-OutputRoot` support other hosts; retain
 the project folder name unless the user requests a different destination.
 
