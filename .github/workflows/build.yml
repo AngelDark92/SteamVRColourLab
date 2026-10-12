@@ -58,13 +58,24 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Check ZIP, checksum, metadata and relocated executable
         run: python tools/verify_package.py --plan "$env:COLOURLAB_OUTPUT_ROOT/build/release-plan.json"
+      # upload-artifact only accepts patterns inside the workspace without "..",
+      # so the canonical external build/ + dist/ output is copied into a
+      # workspace staging folder for transport and keeps that layout there.
+      - name: Stage release artifacts for upload
+        run: |
+          $staging = Join-Path $env:GITHUB_WORKSPACE 'ci-artifacts'
+          New-Item -ItemType Directory -Path (Join-Path $staging 'dist') -Force | Out-Null
+          New-Item -ItemType Directory -Path (Join-Path $staging 'build') -Force | Out-Null
+          Copy-Item "$env:COLOURLAB_OUTPUT_ROOT/dist/SteamVRColourLab-Windows-x64.zip" -Destination (Join-Path $staging 'dist')
+          Copy-Item "$env:COLOURLAB_OUTPUT_ROOT/dist/SteamVRColourLab-Windows-x64.zip.sha256" -Destination (Join-Path $staging 'dist')
+          Copy-Item "$env:COLOURLAB_OUTPUT_ROOT/build/release-plan.json" -Destination (Join-Path $staging 'build')
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: SteamVRColourLab-${{ steps.version.outputs.version }}-Windows-x64
           path: |
-            ${{ env.COLOURLAB_OUTPUT_ROOT }}/dist/SteamVRColourLab-Windows-x64.zip
-            ${{ env.COLOURLAB_OUTPUT_ROOT }}/dist/SteamVRColourLab-Windows-x64.zip.sha256
-            ${{ env.COLOURLAB_OUTPUT_ROOT }}/build/release-plan.json
+            ci-artifacts/dist/SteamVRColourLab-Windows-x64.zip
+            ci-artifacts/dist/SteamVRColourLab-Windows-x64.zip.sha256
+            ci-artifacts/build/release-plan.json
           if-no-files-found: error
           compression-level: 0
           retention-days: 30
@@ -87,9 +98,9 @@ jobs:
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: SteamVRColourLab-${{ needs.windows.outputs.version }}-Windows-x64
-          path: ${{ env.COLOURLAB_OUTPUT_ROOT }}/release-artifacts
+          path: ci-artifacts
       - name: Publish exact tested commit
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: python -m tools.publish_release --artifacts "$COLOURLAB_OUTPUT_ROOT/release-artifacts"
+        run: python -m tools.publish_release --artifacts "$GITHUB_WORKSPACE/ci-artifacts"
