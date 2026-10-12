@@ -324,6 +324,11 @@ startup with external Python removed from PATH. Hosted Windows runners do not
 prove GPU precision or headset interaction; those still require the local
 `--self-test` and SteamVR checks below.
 
+Workflow artifacts are staged in a workspace `ci-artifacts/` folder with the
+same `build/` + `dist/` layout, because `upload-artifact` rejects paths outside
+the workspace; the publisher downloads that folder and re-verifies it before
+tagging and publishing.
+
 ## Tests and builds (source archive)
 
 On Windows, with dependencies installed and a local graphics session:
