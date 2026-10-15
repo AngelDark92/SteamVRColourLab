@@ -74,9 +74,47 @@ the stream itself; Colour Lab cannot confirm its actual bit depth.
 | **Geometry** | Adjust the panel's size and distance. Use **Recenter** to bring it in front of you. |
 | **Session** | Add notes about your streaming setup. These are notes, not settings changes. |
 | **Files** | Save a setup or load one you've saved before. |
+| **Bitrate** | Run fullscreen streaming stress tests and optionally measure headset video payload over ADB. |
 
 Select a number or text field to edit it inside VR. **Save run report** records
 your test, and **Exit** closes the utility. Desktop controls are available too.
+
+## Test streaming bitrate
+
+Open **Bitrate** in VR or in the desktop controls. Choose static detail, moving
+detail, high-contrast motion, or changing noise, and select a duration. **Start
+fullscreen test** fills both eye buffers; panel size, distance and head direction
+cannot leave an unstressed border. Changing noise is the strongest synthetic
+load; it is not a typical game scene and reaching a target is not guaranteed.
+
+Starting collapses the VR menu to **OPEN OPTIONS**, which follows your head.
+Select it to reopen the controls wherever you are looking; **F1** also restores
+the menu. Desktop **Minimize controls** keeps the window available on the taskbar.
+**Stop / restore** returns to the previous colour test. The clock starts on the
+first submitted scene frame with menus minimized. Close the SteamVR dashboard
+if the test is waiting for scene focus; later menu occlusion or focus/tracking
+interruption is recorded in the result.
+
+The comparison target is only a label for your 500/600 Mbps runs. It does not
+change the streamer, driver, codec or encoder settings. **Host encoder target**
+is a requested budget, not the actual received bitrate.
+
+For actual headset Mbps, install/enable the compatible diagnostic
+**GXRStreamProbe** Steam Link build separately, authorize ADB on the headset,
+then select **Connect headset probe** before starting a test. Standard Steam
+Link does not expose these counters. Android platform-tools must be on `PATH`
+or supplied with `--adb PATH`; enter a device serial if more than one authorized
+ADB device is connected. The app never installs an APK or restarts SteamVR.
+
+The tab shows rolling one-second compressed-video Mbps and access units per
+second from the headset's monotonic timestamps. It excludes audio, FEC,
+retransmissions and network overhead. Missing probe data appears as unavailable.
+After a measured test, `runs/<session>/bitrate/<test-id>/` contains `summary.json`,
+`frames.csv` and `bitrate-windows.csv`; the raw tagged log is alongside it. The
+summary excludes five seconds of settling and two seconds of teardown, and
+checks cumulative counters for missing log rows. Decoder outputs and render
+releases are separate from received frames; neither establishes physical display
+presentation. See [measurement details](TECHNICAL_REFERENCE.md#bitrate-tests).
 
 ## Help
 

@@ -18,6 +18,8 @@ from pathlib import Path
 
 from colourlab import __version__, shaders
 from colourlab.core import MODES, PATTERNS, PRESETS, Settings, apply_preset
+from colourlab.bitrate import BitrateTest
+from colourlab.bitrate_probe import HeadsetProbe, HostEncoderTarget
 
 
 def application_home() -> Path:
@@ -96,6 +98,10 @@ class Application:
         self.run_dir = args.output / stamp
         self.run_dir.mkdir(parents=True, exist_ok=False)
         self.events = (self.run_dir / "events.jsonl").open("a", encoding="utf-8", buffering=1)
+        self.bitrate = BitrateTest()
+        self.headset_probe = HeadsetProbe(self.run_dir / "bitrate", getattr(args, "adb", None))
+        self.encoder_target = HostEncoderTarget(getattr(args, "steam_log", None))
+        self.next_bitrate_poll = 0.0
         logging.basicConfig(filename=self.run_dir / "application.log", level=logging.INFO,
                             format="%(asctime)s %(levelname)s %(message)s", force=True)
         self.log_event("starting", {"desktop_only": args.desktop, "settings": self.settings.to_dict()})
@@ -172,7 +178,7 @@ class Application:
                 image = dashboard.render()
                 if image.mode != "RGBA" or image.size != (1280, 800):
                     raise RuntimeError("Dashboard rendering self-test failed.")
-            self.metadata["dashboard_render_check"] = "6 RGBA pages rendered; no SteamVR connection"
+            self.metadata["dashboard_render_check"] = f"{len(dashboard.PAGES)} RGBA pages rendered; no SteamVR connection"
         self.write_session()
         self.log_event("initialised", self.metadata)
         print("Source precision check:", self.precision_check["unique_red_levels"])
@@ -234,6 +240,13 @@ class Application:
         settings.validate()
         if settings == self.settings:
             return
+        if self.bitrate.running and reason != "bitrate test":
+            # A source edit ends the workload. Restore only temporary source
+            # fields the user did not just change; retain the requested edit.
+            values = {name: getattr(self.bitrate.previous, name) for name in ("pattern", "mode", "labels", "animate")
+                      if getattr(settings, name) == getattr(self.settings, name)}
+            self.stop_bitrate(restore=False)
+            settings = replace(settings, **values)
         self.settings = settings
         # Every change resets the deterministic motion phase.
         self.animation_start = time.perf_counter()
@@ -258,6 +271,67 @@ class Application:
     def toggle_vr_menu(self):
         if self.dashboard:
             self.dashboard.set_expanded(not self.dashboard.expanded)
+
+    def start_bitrate(self):
+        if self.bitrate.running:
+            return
+        self.set_cycle(False)
+        self.bitrate.begin(self.settings)
+        with self.headset_probe.lock:
+            self.headset_probe.result = None
+        self.change(replace(self.settings, pattern="bitrate_" + self.bitrate.scene,
+                            mode="reference", labels=False, animate=self.bitrate.scene != "static"), "bitrate test")
+        if self.dashboard:
+            self.dashboard.set_expanded(False)
+        if self.ui:
+            self.ui.refresh()
+        self.log_event("bitrate_workload_start_requested", self.bitrate.snapshot())
+        self.note("Fullscreen bitrate test. OPEN OPTIONS always restores the menu. " +
+                  ("Desktop preview only; no headset measurement." if self.args.desktop else
+                   "Clock starts when the VR scene submits; close the SteamVR dashboard if it has focus."))
+
+    def stop_bitrate(self, restore=True):
+        if not self.bitrate.running:
+            return
+        self.bitrate.running = False
+        self.bitrate.result = "Finished" if self.bitrate.elapsed >= self.bitrate.duration else "Stopped"
+        if self.bitrate.interrupted:
+            self.bitrate.result += " — interrupted; compare with care"
+        if self.bitrate.started is not None and not self.args.desktop:
+            self.headset_probe.marker("end", self.bitrate)
+        context = self.bitrate.snapshot()
+        context["desktop_preview_only"] = bool(self.args.desktop)
+        (self.run_dir / f"bitrate-workload-{self.bitrate.case}.json").write_text(
+            json.dumps(context, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+        self.log_event("bitrate_workload_end", context)
+        if restore:
+            self.change(self.bitrate.previous, "bitrate test")
+            if self.ui:
+                self.ui.refresh()
+        self.note(self.bitrate.result + "; workload saved. Headset results require diagnostic probe frames.")
+
+    def toggle_headset_probe(self):
+        # ADB discovery and teardown must not stall the rendering/UI thread.
+        if self.headset_probe.worker and self.headset_probe.worker.is_alive():
+            import threading
+            threading.Thread(target=self.headset_probe.close, daemon=True, name="ColourLab-disconnect").start()
+        else:
+            self.headset_probe.connect(self.bitrate.serial)
+
+    def bitrate_status(self):
+        probe = self.headset_probe.snapshot()
+        target = self.encoder_target.snapshot()
+        rate = probe["received_mbps"]
+        fps = probe["received_aus_per_second"]
+        result = probe["result"]
+        return (
+            f"{self.bitrate.result} | {self.bitrate.elapsed:.0f} / {self.bitrate.duration:.0f} s",
+            "Headset video (1 s): " + (f"{rate:.1f} Mbps | {fps} AUs/s | {probe['wire_codec']} (probe)" if rate is not None else "unavailable — optional diagnostic probe required"),
+            "Host encoder target: " + (f"{target:.0f} Mbps (request, not delivered payload)" if target is not None else "unavailable (request, not delivered payload)"),
+            (f"Last measured test: {result['received_video_mbps']:.1f} Mbps; " +
+             ("workload interrupted" if result.get("workload", {}).get("interrupted") else
+              "counters reconcile" if result["telemetry_complete"] else "log completeness unverified")) if result else probe["status"],
+        )
 
     def set_cycle(self, enabled: bool):
         self.cycle_start = time.perf_counter() if enabled else None
@@ -305,6 +379,9 @@ class Application:
             "automatic_colour_cycle_enabled": self.cycle_start is not None,
             "stream_depth_requested_is_user_entered": True,
             "stream_depth_confirmed": False,
+            "bitrate_workload": self.bitrate.snapshot(),
+            "bitrate_headset_probe": self.headset_probe.snapshot(),
+            "bitrate_host_encoder_target_mbps": self.encoder_target.snapshot(),
         }
         try:
             path.write_text(json.dumps(data, indent=2, allow_nan=False) + "\n", encoding="utf-8")
@@ -393,8 +470,12 @@ class Application:
             if not self.running:
                 break
             seconds = time.perf_counter() - self.animation_start if self.settings.animate else 0.0
+            if self.bitrate.running:
+                seconds = 0.0 if self.bitrate.started is None else time.perf_counter() - self.bitrate.started
+            submitted = False
             if self.vr:
-                if not self.vr.render(self.settings, seconds):
+                submitted = self.vr.render(self.settings, seconds)
+                if not submitted:
                     # No-focus/tracking errors need not be frame-paced by VR.
                     time.sleep(.005)
                 if self.vr.wants_quit:
@@ -405,9 +486,21 @@ class Application:
                 width, height = self.glfw.get_framebuffer_size(self.window)
                 self.renderer.preview(self.preview_target, width, height)
                 self.glfw.swap_buffers(self.window)
+                if self.args.desktop:
+                    submitted = True
                 next_preview = now + 1/30
             elif not self.vr:
                 time.sleep(.002)
+            if self.bitrate.running:
+                unobscured = submitted and not (self.dashboard and self.dashboard.obscures_test())
+                started, finished = self.bitrate.tick(time.perf_counter(), unobscured)
+                if started and not self.args.desktop:
+                    self.headset_probe.marker("start", self.bitrate)
+                if finished:
+                    self.stop_bitrate()
+            if now >= self.next_bitrate_poll:
+                self.encoder_target.poll()
+                self.next_bitrate_poll = now + .5
             self.frame_count += 1
             status_frames += 1
             if now >= next_status:
@@ -428,6 +521,8 @@ class Application:
                                     "exit_reason": self.exit_reason or "preview_window_closed"})
 
     def close(self):
+        self.stop_bitrate()
+        self.headset_probe.close()
         # Cleanup ordering matters: SteamVR -> GL resources -> context/window.
         for obj in (self.dashboard, self.vr, self.renderer, self.ui):
             if obj:
@@ -452,6 +547,8 @@ def main(argv=None) -> int:
     parser.add_argument("--output", type=Path, default=application_home() / "runs", help="Folder for local session logs and reports; defaults beside the executable")
     parser.add_argument("--settings-dir", type=Path, help="VR save/load folder; defaults to settings beside the executable")
     parser.add_argument("--no-ui", action="store_true", help="Hide desktop controls; VR dashboard and preview shortcuts remain available")
+    parser.add_argument("--adb", type=Path, help="Optional Android platform-tools adb executable for user-initiated headset telemetry")
+    parser.add_argument("--steam-log", type=Path, help="Optional Steam vrserver.txt path for current encoder-request telemetry")
     parser.add_argument("--self-test", action="store_true", help="Validate actual source buffer precision and exit; no SteamVR required")
     parser.add_argument("--frames", type=int, default=0, help="Exit after N loop iterations (smoke tests); 0 runs until closed")
     args = parser.parse_args(argv)

@@ -68,14 +68,16 @@ class Dashboard:
 
     def position_scene(self):
         local = identity()
-        local[1][3] = -.05 if self.expanded else -1.0
-        local[2][3] = -1.8
-        world = matmul(self.anchor, local) if self.anchor is not None else local
+        local[1][3] = -.05 if self.expanded else -.38
+        local[2][3] = -1.8 if self.expanded else -1.2
+        world = matmul(self.anchor, local) if self.anchor is not None and self.expanded else local
         transform = self.vr.HmdMatrix34_t()
         for row in range(3):
             for col in range(4):
                 transform.m[row][col] = world[row][col]
-        if self.anchor is None:
+        if self.anchor is None or not self.expanded:
+            # The recovery button follows the head even after recentering.
+            # Looking away from an old world anchor must never lose the menu.
             self.overlay.setOverlayTransformTrackedDeviceRelative(self.scene, self.vr.k_unTrackedDeviceIndex_Hmd, transform)
         else:
             self.overlay.setOverlayTransformAbsolute(self.scene, self.vr.TrackingUniverseStanding, transform)
@@ -86,6 +88,12 @@ class Dashboard:
         self.overlay.setOverlayTexelAspect(self.scene, aspect)
 
     def set_expanded(self, expanded):
+        if expanded and not self.expanded:
+            if self.app.bitrate.running and self.app.bitrate.started is not None:
+                self.app.bitrate.interrupted = True
+            pose = getattr(self.app.vr, "last_pose", None) if self.app.vr else None
+            self.anchor = [row[:] for row in pose] if pose is not None else None
+            self.recenter_pending = pose is None
         self.expanded = expanded
         self.ui.cancel_pointer()
         self.pointer_owner = None
@@ -93,6 +101,7 @@ class Dashboard:
         self.mouse_scale(self.scene, self.ui.WIDTH if expanded else 360, self.ui.HEIGHT if expanded else 96)
         self.position_scene()
         self.ui.dirty = True
+        self.ui.sync()
         # Commit collapse/expand immediately, before processing another click.
         self.refresh_images()
         self.overlay.showOverlay(self.scene)
@@ -117,6 +126,9 @@ class Dashboard:
                 "dashboard_visible": bool(self.overlay.isOverlayVisible(self.handle)),
                 "expanded": self.expanded, "pointer_moves": self.moves, "select_releases": self.clicks}
 
+    def obscures_test(self):
+        return self.expanded or bool(self.overlay.isOverlayVisible(self.handle)) or bool(self.overlay.isDashboardVisible())
+
     def upload(self, handle, image):
         # Each overlay retains one fixed-size GL resource for its lifetime.
         if handle not in self.textures:
@@ -128,7 +140,10 @@ class Dashboard:
 
     def pump(self):
         vr = self.vr
-        self.ui.sync()
+        # A minimized test must not redraw/upload two 1280x800 menus at 30 Hz
+        # just because the live rate changes. Refresh telemetry on reopening.
+        if self.expanded or self.overlay.isOverlayVisible(self.handle):
+            self.ui.sync()
         pose = self.app.vr.last_pose if self.app.vr else None
         if self.recenter_pending and pose is not None:
             self.anchor = [row[:] for row in pose]

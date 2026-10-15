@@ -1,4 +1,26 @@
-# Validation results — 0.2.1
+# Bitrate tab validation — 2026-10-15 working tree
+
+`test_windows.bat`: **Ran 150 tests — OK**. The suite includes real
+OpenGL coverage of all four fullscreen workloads, deterministic changing noise,
+unchanged colour-source precision, per-eye clip-space coverage independent of
+pose/panel geometry, VR minimize/reopen and fixed-texture lifetime, desktop
+minimize/restore, menu-occlusion detection, ADB device-selection safeguards and exact byte accounting.
+This is local working-tree validation, not a published release or CI result.
+
+Replaying all six saved 500/600 Mbps dev.5 headset captures through the new
+analyzer reproduced their measured rates, cumulative-counter reconciliation and
+the same seven accepted IDs without decoder output. Replay is not a new live
+headset test. The optional reader was tested with synthetic records and mocked
+ADB commands; no APK update, device access or SteamVR restart was performed for
+this application change. Desktop and VR tab images were inspected locally.
+
+Evidence is outside the checkout at
+`../builds/SteamVRColourLab/build/bitrate-tab-20261015/`: `unit-tests-final.txt`,
+`real-capture-replay.json`, and the tab preview PNGs. The portable package and
+its independent smoke checks are recorded there after packaging. Historical
+headset results below apply to their original builds, not this new tab.
+
+# Historical validation results — 0.2.1
 
 85 automated tests passed, including 4 real-GPU tests. Live headset testing
 confirmed the new in-scene menu, correct click positions and removal of flashing.

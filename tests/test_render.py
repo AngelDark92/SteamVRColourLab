@@ -1,5 +1,6 @@
 """Real OpenGL shader/buffer tests; Linux EGL or Windows GLFW, never a mock."""
 import math
+import struct
 import unittest
 from dataclasses import replace
 
@@ -108,6 +109,25 @@ class RenderTests(unittest.TestCase):
 
     def test_no_gl_errors(self):
         self.gl.check("test completion")
+
+    def test_bitrate_patterns_cover_corners_and_bypass_comparison_labels(self):
+        for scene in ("static", "motion", "contrast", "noise"):
+            base = Settings(pattern="bitrate_" + scene, mode="reference", labels=False, animate=True)
+            data = self.render(base, .1)
+            self.assertEqual(data.tobytes(), self.render(replace(base, mode="three", labels=True), .1).tobytes())
+            clear = struct.unpack("<e", struct.pack("<e", .001))[0]
+            for x, y in ((0, 0), (383, 0), (0, 95), (383, 95), (192, 48)):
+                self.assertNotEqual(self.pixel(data, x, y)[:3], (clear, clear, clear))
+                self.assertEqual(self.pixel(data, x, y)[3], 1)
+            self.assertGreater(len(set(data[0::4])), 100)
+
+    def test_bitrate_noise_changes_across_frames_and_is_repeatable(self):
+        settings = Settings(pattern="bitrate_noise", animate=True)
+        a, b = self.render(settings, 0), self.render(settings, 1 / 90)
+        self.assertEqual(a.tobytes(), self.render(settings, 0).tobytes())
+        self.assertGreater(sum(x != y for x, y in zip(a[0::4], b[0::4])), self.target.width * self.target.height * .95)
+        static = replace(settings, pattern="bitrate_static")
+        self.assertEqual(self.render(static, 0).tobytes(), self.render(static, 300).tobytes())
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from .core import MODES, PATTERNS, PRESETS, Settings, hue_endpoints
+from .bitrate import SCENES
 
 
 @dataclass
@@ -30,7 +31,7 @@ class Button:
 
 class DashboardUI:
     WIDTH, HEIGHT = 1280, 800
-    PAGES = ("Source", "RGB", "Hue", "Geometry", "Session", "Files")
+    PAGES = ("Source", "RGB", "Hue", "Geometry", "Session", "Files", "Bitrate")
     # One source of UI limits; Settings.validate remains authoritative.
     NUMBERS = {
         "hue": ("Hue (degrees)", 0, 360, 1),
@@ -71,7 +72,8 @@ class DashboardUI:
 
     def sync(self):
         state = (repr(self.app.settings), self.app.preset_index,
-                 self.app.cycle_start is not None, self.app.notice)
+                 self.app.cycle_start is not None, self.app.notice,
+                 repr(self.app.bitrate.snapshot()), self.app.bitrate.serial, self.app.bitrate_status())
         if state != self._state:
             self._state = state
             if self.app.notice and self.app.notice != self._notice:
@@ -88,6 +90,8 @@ class DashboardUI:
     def set_page(self, page):
         self.page = page
         self.editor = None
+        if page == "Bitrate":
+            self.message = "Fullscreen in both eyes. Target is a note; set bitrate in your streamer. OPEN OPTIONS restores controls."
         if page == "Files":
             self.refresh_files()
         self.rebuild()
@@ -110,13 +114,17 @@ class DashboardUI:
             self.app.ui.cycle.set(self.app.cycle_start is not None)
 
     def field_value(self, field):
+        if field.startswith("bitrate."):
+            return getattr(self.app.bitrate, field.split(".", 1)[1])
         if "." in field:
             name, component = field.split(".")
             return getattr(self.app.settings, name)[int(component)]
         return getattr(self.app.settings, field)
 
     def set_field(self, field, value):
-        if "." in field:
+        if field.startswith("bitrate."):
+            self.app.bitrate.configure(field.split(".", 1)[1], value)
+        elif "." in field:
             name, component = field.split(".")
             rgb = list(getattr(self.app.settings, name))
             rgb[int(component)] = value
@@ -209,7 +217,8 @@ class DashboardUI:
             self.build_editor()
             return
         for i, page in enumerate(self.PAGES):
-            self.button("page:" + page, (24 + i*207, 82, 219 + i*207, 140), page,
+            step = (self.WIDTH - 48) // len(self.PAGES)
+            self.button("page:" + page, (24 + i*step, 82, 24 + i*step + step - 12, 140), page,
                         lambda p=page: self.set_page(p), page == self.page)
         s = self.app.settings
         if self.page == "Source":
@@ -269,6 +278,18 @@ class DashboardUI:
             self.button("files:prev", (24, 582, 230, 642), "< Previous", lambda: self.file_step(-1))
             self.line(268, 600, f"Page {self.file_page+1} / {max(1, math.ceil(len(self.files)/5))}   Select a file to load")
             self.button("files:next", (1050, 582, 1256, 642), "Next >", lambda: self.file_step(1))
+        elif self.page == "Bitrate":
+            self.button("bitrate:scene", (24, 156, 1256, 214), "Workload: " + SCENES[self.app.bitrate.scene] + "   >",
+                        lambda: self.set_field("bitrate.scene", list(SCENES)[(list(SCENES).index(self.app.bitrate.scene) + 1) % len(SCENES)]))
+            self.numeric_row("bitrate.duration", "Duration (seconds)", 226, 15, 600, 15)
+            self.numeric_row("bitrate.target", "Comparison target (Mbps)", 296, 10, 2000, 100)
+            self.button("bitrate:start", (24, 372, 630, 432), "Start fullscreen test", self.app.start_bitrate)
+            self.button("bitrate:stop", (648, 372, 1256, 432), "Stop / restore colour test", self.app.stop_bitrate)
+            for i, text in enumerate(self.app.bitrate_status()):
+                self.line(32, 446 + i * 32, text)
+            self.button("bitrate:probe", (24, 582, 630, 642), "Connect / disconnect headset probe", self.app.toggle_headset_probe)
+            self.button("bitrate.serial", (648, 582, 1256, 642), "Device: " + (self.app.bitrate.serial or "auto (one headset)"),
+                        lambda: self.edit("bitrate.serial", "ADB device serial (empty = one connected headset)", False))
         elif self.page == "Quit":
             self.line(32, 220, "Exit Colour Lab and end this test session?")
             self.button("quit:confirm", (24, 328, 630, 404), "Exit application", self.app.stop)

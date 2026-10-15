@@ -45,6 +45,22 @@ class DashboardControlTests(TemporaryApplicationTests):
     def page(self, name):
         click(self.ui, "page:" + name)
 
+    def test_bitrate_tab_configures_fullscreen_test_and_stops_back_to_colour(self):
+        original = self.app.settings
+        self.page("Bitrate")
+        click(self.ui, "bitrate:scene")
+        click(self.ui, "bitrate.target:plus")
+        click(self.ui, "bitrate.duration:plus")
+        click(self.ui, "bitrate:start")
+        self.assertEqual(self.app.bitrate.target, 600)
+        self.assertEqual(self.app.bitrate.duration, 60)
+        self.assertEqual(self.app.settings.pattern, "bitrate_contrast")
+        click(self.ui, "bitrate.target:plus")
+        self.assertTrue(self.ui.message.startswith("Input error:"))
+        self.assertEqual(self.app.bitrate.target, 600)
+        click(self.ui, "bitrate:stop")
+        self.assertEqual(self.app.settings, original)
+
     def test_every_settings_field_can_be_changed_using_pointer_controls(self):
         original = self.app.settings.to_dict()
         click(self.ui, "mode:10bit")
@@ -222,6 +238,9 @@ class FakeOverlay:
     setOverlayTransformAbsolute = openvr.IVROverlay.setOverlayTransformAbsolute
     setOverlayTransformTrackedDeviceRelative = openvr.IVROverlay.setOverlayTransformTrackedDeviceRelative
     setOverlayFlag = openvr.IVROverlay.setOverlayFlag
+
+    def isDashboardVisible(self):
+        return getattr(self, "global_dashboard_visible", False)
 
     def __init__(self):
         self.queues = defaultdict(deque)
@@ -572,6 +591,45 @@ class DashboardTransportTests(TemporaryApplicationTests):
         self.dashboard.pump()
         self.assertAlmostEqual(self.overlay.transforms[43][2][0][3], 2.0)
         self.assertFalse(self.dashboard.recenter_pending)
+
+    def test_minimized_button_is_head_relative_and_reopens_at_latest_head_pose(self):
+        pose = identity()
+        pose[0][3], pose[1][3] = 10, 1.6
+        self.app.vr = SimpleNamespace(last_pose=pose, recenter_pending=False, close=Mock())
+        self.dashboard.pump()
+        self.dashboard.set_expanded(False)
+        kind, device, transform = self.overlay.transforms[43]
+        self.assertEqual((kind, device), ("relative", openvr.k_unTrackedDeviceIndex_Hmd))
+        self.assertEqual(transform[0][3], 0)
+        self.assertAlmostEqual(transform[1][3], -.38)
+        self.app.vr.last_pose[0][3] = 20
+        self.dashboard.set_expanded(True)
+        self.assertEqual(self.overlay.transforms[43][0], "absolute")
+        self.assertAlmostEqual(self.overlay.transforms[43][2][0][3], 20)
+
+    def test_minimized_hidden_dashboard_does_not_redraw_for_live_counter_changes(self):
+        self.dashboard.set_expanded(False)
+        uploads = len(self.overlay.uploads)
+        self.app.bitrate.elapsed = 12.3
+        self.dashboard.next_update = 0
+        self.dashboard.pump()
+        self.assertEqual(len(self.overlay.uploads), uploads)
+        self.dashboard.set_expanded(True)
+        self.assertGreater(len(self.overlay.uploads), uploads)
+
+    def test_expanded_controls_and_dashboard_are_marked_as_obscuring_workload(self):
+        self.assertTrue(self.dashboard.obscures_test())
+        self.dashboard.set_expanded(False)
+        self.assertFalse(self.dashboard.obscures_test())
+        self.overlay.global_dashboard_visible = True
+        self.assertTrue(self.dashboard.obscures_test())
+        self.overlay.global_dashboard_visible = False
+        self.overlay.showOverlay(41)
+        self.assertTrue(self.dashboard.obscures_test())
+        self.app.bitrate.begin(self.app.settings)
+        self.app.bitrate.tick(1, True)
+        self.dashboard.set_expanded(True)
+        self.assertTrue(self.app.bitrate.interrupted)
 
     def test_image_loaded_and_scene_input_status_are_recorded(self):
         self.overlay.event(openvr.VREvent_ImageLoaded, handle=43)

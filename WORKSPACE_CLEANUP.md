@@ -53,3 +53,20 @@ portable build reclaimed 61,484,401 bytes of its own disposable build files.
 The fresh logs are `build/colourlab-named-folder-*.log` in the named output root.
 Project `AGENTS.md`, `.agents/AGENTS.md`, cavecrew delegation guidance and the
 `steamvrcolourlab-build` skill document the required output location.
+# Bitrate tab package — 2026-10-15
+
+Built and verified the updated portable application at the canonical external
+`../builds/SteamVRColourLab/dist/` location. Three successful packaging passes
+removed **189,448,818 bytes in 3,306 files** through success-gated cleanup,
+restricted to each invocation's staging and verified previous-package files.
+The final pass removed 63,619,566 bytes in 1,103 files. None reported retained
+previous files or a cleanup error. Historical build folders, toolchains, environments,
+validation evidence and unrelated outputs were preserved.
+
+All **six existing portable saved-data files** matched their pre-build SHA-256
+after restoration. The distributable ZIP excludes saved runs/settings. Successful
+unit-test and relocated-package fixtures removed themselves; the task fixture
+directory is empty. Small logs, GUI previews, replay receipts and smoke-session
+evidence are retained in `build/bitrate-tab-20261015/` beneath the output root.
+See `build/portable/last-cleanup.json` and that task's `portable-smoke.json` and
+`portable-data-before.json`. No source relocation or manual broad cleanup ran.

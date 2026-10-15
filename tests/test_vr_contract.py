@@ -99,6 +99,15 @@ class VRContractTests(unittest.TestCase):
         self.assertFalse(self.bridge.render(Settings(), 0))
         self.assertEqual(self.runtime.submissions, [])
 
+    def test_bitrate_workload_fills_both_eyes_independent_of_head_pose_and_panel(self):
+        from dataclasses import replace
+        from colourlab.core import identity
+        self.runtime.pose = matrix(10, 4, -20)
+        settings = replace(Settings(), pattern="bitrate_noise", panel_width=.2, panel_height=.2, panel_distance=10)
+        self.assertTrue(self.bridge.render(settings, 1))
+        self.assertEqual([draw[2] for draw in self.renderer.draws], [identity(), identity()])
+        self.assertEqual(len(self.runtime.submissions), 2)
+
     def test_rejected_float_texture_does_not_fallback(self):
         self.runtime.fail = True
         with self.assertRaisesRegex(RuntimeError, "No 8-bit fallback"):

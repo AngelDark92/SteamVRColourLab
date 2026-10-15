@@ -18,7 +18,7 @@ out vec4 frag;
 uniform vec3 u_start;
 uniform vec3 u_end;
 uniform int u_mode;       // 0=8, 1=10, 2=reference, 3=compare, 4=three, 5=dither8
-uniform int u_pattern;    // horizontal, vertical, radial, solid, hue, atlas
+uniform int u_pattern;    // 0..5 colour, 6..9 fullscreen bitrate workloads
 uniform int u_labels;
 uniform int u_swap;
 uniform float u_seconds; // zero for the static test
@@ -66,6 +66,35 @@ bool labelPixel(vec2 uv, int kind) {
     return ((glyph(ch,p.x%6) >> p.y)&1) != 0;
 }
 void main() {
+    if (u_pattern >= 6) {
+        // Every pixel in each submitted eye is covered. These workloads bypass
+        // colour comparison sections, label strips, and panel geometry.
+        vec2 p = gl_FragCoord.xy;
+        float tick = floor(u_seconds * 90.0);
+        float seconds = (u_pattern == 6) ? 0.0 : tick / 90.0;
+        vec3 s;
+        if (u_pattern == 9) {
+            uint seed = uint(tick) * 747796405u;
+            uvec2 pixel = uvec2(p);
+            s = vec3(noise(pixel, seed + 17u), noise(pixel, seed + 137u),
+                     noise(pixel, seed + 997u)) + 0.5;
+        } else {
+            vec2 a = floor((p + vec2(157.0, 89.0) * seconds) / 4.0);
+            vec2 b = floor((p - vec2(113.0, 173.0) * seconds) / 12.0);
+            vec2 c = floor((p + vec2(53.0, -71.0) * seconds) / 36.0);
+            // Wrap cells before converting: long-running motion can go negative.
+            uvec2 ai = uvec2(mod(a, 65536.0)), bi = uvec2(mod(b, 65536.0)), ci = uvec2(mod(c, 65536.0));
+            s = vec3(noise(ai, 17u), noise(ai, 137u), noise(ai, 997u)) * 0.45
+              + vec3(noise(bi, 31u), noise(bi, 151u), noise(bi, 1013u)) * 0.35
+              + vec3(noise(ci, 47u), noise(ci, 167u), noise(ci, 1021u)) * 0.20 + 0.5;
+            if (u_pattern == 8) {
+                float checker = mod(a.x + a.y, 2.0);
+                s = clamp((s - 0.5) * 2.4 + 0.5 + (checker - 0.5) * 0.35, 0.0, 1.0);
+            }
+        }
+        frag = vec4(toLinear(clamp(s, 0.0, 1.0)), 1.0);
+        return;
+    }
     vec2 uv = v_uv;
     float atlasHue = 0.0;
     if (u_pattern == 5) {

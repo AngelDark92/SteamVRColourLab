@@ -24,6 +24,17 @@ class UITests(unittest.TestCase):
     def test_default_readback(self):
         self.assertEqual(self.ui.read(), self.app.settings)
 
+    def test_bitrate_tab_and_desktop_minimize_can_be_restored(self):
+        self.assertEqual([self.ui.tabs.tab(tab, "text") for tab in self.ui.tabs.tabs()], ["Colour tests", "Bitrate"])
+        self.ui.tabs.select(1)
+        self.ui.root.update()
+        self.ui.root.iconify()
+        self.ui.root.update()
+        self.assertEqual(self.ui.root.state(), "iconic")
+        self.ui.root.deiconify()
+        self.ui.root.update()
+        self.assertEqual(self.ui.root.state(), "normal")
+
     def test_custom_fractional_rgb(self):
         self.ui.rgb_vars[0][0].set("0.0123456789")
         self.ui.mode.set(MODES["10bit"])

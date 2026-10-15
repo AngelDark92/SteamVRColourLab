@@ -7,6 +7,7 @@ from dataclasses import replace
 from pathlib import Path
 
 from .core import MODES, PATTERNS, PRESETS, Settings, apply_preset, hue_endpoints
+from .bitrate import SCENES
 
 
 class Controls:
@@ -25,8 +26,13 @@ class Controls:
             style.theme_use("clam")
         style.configure("Title.TLabel", font=("Segoe UI", 17, "bold"))
         style.configure("Section.TLabelframe.Label", font=("Segoe UI", 10, "bold"))
-        canvas = tk.Canvas(self.root, highlightthickness=0)
-        scrollbar = ttk.Scrollbar(self.root, orient="vertical", command=canvas.yview)
+        self.tabs = ttk.Notebook(self.root)
+        self.tabs.pack(fill="both", expand=True)
+        colour_tab, bitrate_tab = ttk.Frame(self.tabs), ttk.Frame(self.tabs, padding=16)
+        self.tabs.add(colour_tab, text="Colour tests")
+        self.tabs.add(bitrate_tab, text="Bitrate")
+        canvas = tk.Canvas(colour_tab, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(colour_tab, orient="vertical", command=canvas.yview)
         canvas.configure(yscrollcommand=scrollbar.set)
         scrollbar.pack(side="right", fill="y")
         canvas.pack(side="left", fill="both", expand=True)
@@ -137,6 +143,56 @@ class Controls:
                              "Close the SteamVR dashboard before judging banding. Desktop preview is not 10-bit proof.",
                   wraplength=575).grid(row=8, column=0, sticky="w", pady=(8, 0))
         self.refresh()
+        self.build_bitrate(bitrate_tab)
+
+    def build_bitrate(self, frame):
+        frame.columnconfigure(1, weight=1)
+        ttk.Label(frame, text="Fullscreen bitrate tests", style="Title.TLabel").grid(row=0, column=0, columnspan=3, sticky="w")
+        ttk.Label(frame, text="Patterns cover both eyes, independent of panel size or head direction.\n"
+                  "The comparison target is a note; change stream bitrate in your streamer.", wraplength=590).grid(
+                      row=1, column=0, columnspan=3, sticky="w", pady=12)
+        self.bitrate_scene = tk.StringVar(value=SCENES["motion"])
+        self.combo(frame, "Workload", self.bitrate_scene, SCENES.values(), 2, lambda _: None)
+        self.bitrate_duration = tk.StringVar(value="45")
+        self.bitrate_target = tk.StringVar(value="500")
+        self.bitrate_serial = tk.StringVar()
+        for row, label, variable in ((3, "Duration (15–600 seconds)", self.bitrate_duration),
+                                      (4, "Comparison target (Mbps)", self.bitrate_target),
+                                      (5, "ADB serial (empty = one headset)", self.bitrate_serial)):
+            ttk.Label(frame, text=label).grid(row=row, column=0, sticky="w", pady=6)
+            ttk.Entry(frame, textvariable=variable).grid(row=row, column=1, columnspan=2, sticky="ew")
+        buttons = ttk.Frame(frame)
+        buttons.grid(row=6, column=0, columnspan=3, sticky="w", pady=12)
+        ttk.Button(buttons, text="Start fullscreen test", command=self.start_bitrate).pack(side="left", padx=(0, 8))
+        ttk.Button(buttons, text="Stop / restore", command=lambda: self.app.stop_bitrate()).pack(side="left", padx=(0, 8))
+        ttk.Button(buttons, text="Minimize controls", command=self.root.iconify).pack(side="left")
+        self.bitrate_lines = [tk.StringVar(value="") for _ in range(4)]
+        for row, variable in enumerate(self.bitrate_lines, 7):
+            ttk.Label(frame, textvariable=variable, wraplength=590).grid(row=row, column=0, columnspan=3, sticky="w", pady=5)
+        ttk.Button(frame, text="Connect / disconnect optional headset probe", command=self.connect_probe).grid(
+            row=11, column=0, columnspan=3, sticky="w", pady=12)
+        ttk.Label(frame, text="Exact headset Mbps needs the diagnostic GXRStreamProbe build and authorized ADB.\n"
+                  "Connect before the test. Normal Steam Link supplies no decoder-input counters.\n"
+                  "Results and frame CSVs are saved in this session's runs folder.\n"
+                  "In VR, OPEN OPTIONS follows your head; F1 also restores the menu.", wraplength=590).grid(
+                      row=12, column=0, columnspan=3, sticky="w", pady=8)
+
+    def start_bitrate(self):
+        try:
+            self.app.bitrate.configure("scene", next(k for k, v in SCENES.items() if v == self.bitrate_scene.get()))
+            self.app.bitrate.configure("duration", float(self.bitrate_duration.get()))
+            self.app.bitrate.configure("target", float(self.bitrate_target.get()))
+            self.app.start_bitrate()
+        except (ValueError, StopIteration) as exc:
+            self.status.set("Bitrate input error: " + str(exc))
+
+    def connect_probe(self):
+        try:
+            if not (self.app.headset_probe.worker and self.app.headset_probe.worker.is_alive()):
+                self.app.bitrate.configure("serial", self.bitrate_serial.get().strip())
+            self.app.toggle_headset_probe()
+        except ValueError as exc:
+            self.status.set("Probe input error: " + str(exc))
 
     @staticmethod
     def section(parent, text, row):
@@ -244,6 +300,9 @@ class Controls:
     def pump(self):
         if self.app.settings != self._last_settings:
             self.refresh()
+        if hasattr(self.app, "bitrate_status"):
+            for variable, text in zip(self.bitrate_lines, self.app.bitrate_status()):
+                variable.set(text)
         self.root.update_idletasks()
         self.root.update()
 

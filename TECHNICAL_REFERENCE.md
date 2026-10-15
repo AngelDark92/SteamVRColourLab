@@ -433,3 +433,55 @@ not imply end-to-end validation of this particular build.
   https://docs.python.org/3/using/windows.html
 
 See `LICENSE` and `THIRD_PARTY_NOTICES.md` for licensing.
+## Bitrate tests
+
+The Bitrate tab is available in the in-scene menu, SteamVR dashboard and desktop
+controls. Its four procedural workloads render a clip-space quad into the entire
+recommended per-eye `GL_RGBA16F` target. They bypass the colour panel's world
+transform, comparison sections and label strip. Static detail is temporally
+unchanged; moving and contrast detail use opposing multiscale motion; changing
+noise has new deterministic per-pixel RGB values on a 90-Hz pattern timeline.
+The runtime still paces actual submissions through `WaitGetPoses`; the timeline
+does not imply 90 delivered frames per second. No renderer readback is performed
+in the live loop.
+
+The test clock waits for the first successfully submitted stereo frame with
+both the expanded menu and SteamVR dashboard closed. Reopening either menu or
+losing scene focus/tracking after that point marks the workload interrupted. A
+desktop-only preview never writes headset measurement markers. Tests preserve
+the previous colour setup and never change SteamVR/driver/encoder settings.
+The minimized recovery overlay is head-relative, including after recentering;
+reopening places the full menu at the current pose. Overlay textures retain
+their fixed storage dimensions throughout. While minimized and the SteamVR
+dashboard is hidden, changing counters do not trigger full-menu texture uploads.
+
+Optional measurement requires the diagnostic `GXRStreamProbe` protocol used by
+the exact-build Codecs Support experiment. The normal Steam Link APK is not a
+measurement source. Installation/signing remain separate; no APK is bundled.
+The ADB connection is user initiated and restricted to authorized device
+selection, filtered logcat, and `GXRTestPhase` log markers. It does not clear
+logcat, install, force-stop, launch or alter application data. ADB discovery,
+markers and export run off the render thread. `--adb` selects platform-tools;
+`--steam-log` can override discovery of Steam's `vrserver.txt`.
+
+The raw log, workload JSON and per-test CSV/JSON exports stay in the local run
+directory. Device phase markers delimit each uniquely identified test. Analysis
+trims five seconds after start and two seconds before end, sums unique non-config
+received AU bytes, and divides by actual device monotonic seconds. Exported
+100-ms and one-second buckets omit partial final buckets. Successful queue bytes
+include accepted retries/duplicates; frame identity, decoder output and render
+release use PID, logical stream and transport ID. PTS is an ID, not a clock.
+
+Counter validation compares before/after native cumulative checkpoints, including
+attempts, accepted bytes, outputs and releases, so attaching to an existing stream
+does not require counters to start at zero. Missing checkpoints or mismatches
+leave completeness unverified. An interrupted workload can have complete logs;
+it still is not an uninterrupted comparison. A received-ID gap is not a direct
+measurement of radio loss, and a render release is not display scanout proof.
+
+Live Mbps is a trailing one-second payload window and expires when frames stop
+arriving or the reader disconnects. The host heartbeat's encoder budget appears
+separately and expires after twenty seconds without a new sample. A larger target
+does not ensure larger payload in simple scenes. The displayed probe codec label
+is not an independent bitstream decode or the whole-frame hash proof performed
+in the original investigation; raw capture events are retained for that audit.

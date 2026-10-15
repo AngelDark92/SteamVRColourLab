@@ -214,7 +214,8 @@ class Renderer:
         g.Uniform3f(self.loc("u_start"), *settings.start_rgb)
         g.Uniform3f(self.loc("u_end"), *settings.end_rgb)
         modes = {"8bit": 0, "10bit": 1, "reference": 2, "compare": 3, "three": 4, "dither8": 5}
-        patterns = {"horizontal": 0, "vertical": 1, "radial": 2, "solid": 3, "hue": 4, "atlas": 5}
+        patterns = {"horizontal": 0, "vertical": 1, "radial": 2, "solid": 3, "hue": 4, "atlas": 5,
+                    "bitrate_static": 6, "bitrate_motion": 7, "bitrate_contrast": 8, "bitrate_noise": 9}
         for name, value in (("u_mode", modes[settings.mode]), ("u_pattern", patterns[settings.pattern]),
                             ("u_labels", int(settings.labels)), ("u_swap", int(settings.swap))):
             g.Uniform1i(self.loc(name), value)

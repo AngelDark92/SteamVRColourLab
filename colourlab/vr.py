@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from .core import from_openvr, identity, matmul, panel_model, rigid_inverse
+from .bitrate import is_fullscreen
 
 
 class VRBridge:
@@ -97,7 +98,10 @@ class VRBridge:
         head_view = rigid_inverse(self.last_pose)
         for eye, target in enumerate(self.targets):
             view = matmul(self.eye_view[eye], head_view)
-            mvp = matmul(self.projection[eye], matmul(view, model))
+            # A clip-space quad fills the complete per-eye target, including
+            # asymmetric projections. Turning or changing panel size cannot
+            # reveal unstressed background around a bitrate workload.
+            mvp = identity() if is_fullscreen(settings) else matmul(self.projection[eye], matmul(view, model))
             self.renderer.draw(target, settings, mvp, seconds)
         self.renderer.gl.Flush()
         try:
@@ -118,7 +122,8 @@ class VRBridge:
         # OpenVR may itself queue GL work; flush again after Submit.
         self.renderer.gl.Flush()
         self.submitted_frames += 1
-        self.last_submit = "RGBA16F submitted; stream depth remains unverified"
+        self.last_submit = ("Fullscreen bitrate workload submitted; use headset probe for Mbps"
+                            if is_fullscreen(settings) else "RGBA16F submitted; stream depth remains unverified")
         return True
 
     def close(self):

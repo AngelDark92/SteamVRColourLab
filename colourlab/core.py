@@ -22,6 +22,10 @@ PATTERNS = {
     "solid": "Solid colour (start RGB)",
     "hue": "Continuous hue sweep",
     "atlas": "12-colour gradient atlas",
+    "bitrate_static": "Bitrate: fullscreen static detail",
+    "bitrate_motion": "Bitrate: fullscreen moving detail",
+    "bitrate_contrast": "Bitrate: fullscreen high-contrast motion",
+    "bitrate_noise": "Bitrate: fullscreen changing noise",
 }
 
 
