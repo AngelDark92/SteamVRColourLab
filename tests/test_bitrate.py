@@ -165,7 +165,7 @@ class EvidenceTests(unittest.TestCase):
             with patch("colourlab.bitrate_probe.find_adb", return_value="adb"), \
                  patch("colourlab.bitrate_probe.subprocess.run", return_value=SimpleNamespace(stdout=listing)), \
                  patch("colourlab.bitrate_probe.subprocess.Popen") as spawn:
-                probe._read("")
+                probe._read("", usb_only=False)
             spawn.assert_not_called()
             self.assertFalse(probe.connected)
             self.assertIn("authorized headset", probe.status)

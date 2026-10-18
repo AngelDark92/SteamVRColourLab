@@ -75,6 +75,7 @@ the stream itself; Colour Lab cannot confirm its actual bit depth.
 | **Session** | Add notes about your streaming setup. These are notes, not settings changes. |
 | **Files** | Save a setup or load one you've saved before. |
 | **Bitrate** | Run fullscreen streaming stress tests and optionally measure headset video payload over ADB. |
+| **Telemetry** | Record PC/headset measurements and verify the codec from captured stream bytes. |
 
 Select a number or text field to edit it inside VR. **Save run report** records
 your test, and **Exit** closes the utility. Desktop controls are available too.
@@ -99,22 +100,55 @@ The comparison target is only a label for your 500/600 Mbps runs. It does not
 change the streamer, driver, codec or encoder settings. **Host encoder target**
 is a requested budget, not the actual received bitrate.
 
-For actual headset Mbps, install/enable the compatible diagnostic
-**GXRStreamProbe** Steam Link build separately, authorize ADB on the headset,
-then select **Connect headset probe** before starting a test. Standard Steam
-Link does not expose these counters. Android platform-tools must be on `PATH`
-or supplied with `--adb PATH`; enter a device serial if more than one authorized
-ADB device is connected. The app never installs an APK or restarts SteamVR.
+The **Telemetry** tab saves continuous measurements while you run a workload.
+The workload ID in the CSV identifies the test. Legacy `GXRStreamProbe` logs
+can still produce per-frame exports; that older protocol is separate from the
+new decoder probe. See [measurement details](TECHNICAL_REFERENCE.md#bitrate-tests).
 
-The tab shows rolling one-second compressed-video Mbps and access units per
-second from the headset's monotonic timestamps. It excludes audio, FEC,
-retransmissions and network overhead. Missing probe data appears as unavailable.
-After a measured test, `runs/<session>/bitrate/<test-id>/` contains `summary.json`,
-`frames.csv` and `bitrate-windows.csv`; the raw tagged log is alongside it. The
-summary excludes five seconds of settling and two seconds of teardown, and
-checks cumulative counters for missing log rows. Decoder outputs and render
-releases are separate from received frames; neither establishes physical display
-presentation. See [measurement details](TECHNICAL_REFERENCE.md#bitrate-tests).
+## Record telemetry and verify a codec
+
+PC recording starts automatically. Each session's `telemetry/` folder contains
+`samples.csv`, `samples.jsonl`, a field description in `schema.json`, and newly
+observed NVENC log lines. It records successful Colour Lab stereo submissions,
+the available host encoder target and submit-to-lock latency, and headset
+readings when connected. Unsupported readings stay empty. The host target is
+a request; the app does not infer actual sent Mbps from it.
+
+In **Telemetry**, leave **USB ADB only** selected, connect one headset by USB,
+authorize USB debugging in the headset, then select **Connect / disconnect**.
+Android platform-tools must be on `PATH` or supplied with `--adb PATH`. Battery
+temperature, charge and available current thermal sensors are sampled every
+five seconds without a Steam Link patch. Turn USB-only off to use an already
+authorized ADB network transport; enter its serial on the desktop or Bitrate tab.
+
+Decoder measurements and live byte verification require the updated **Codecs
+Support** helper from the sibling `steamlink-patches` project. Its diagnostic
+producer is guarded to exact Steam Link **2.0.20/5001712** and
+**2.0.23/5002363**; headset validation of this new instrumentation is pending.
+Repatch/install that version separately. Colour Lab connects and writes only
+its own temporary diagnostic requests; it never installs an APK or restarts
+SteamVR. Disconnect removes owned requests; a 30-second lease also stops
+native collection after a lost connection.
+
+The decoder probe measures accepted compressed input Mbps, accepted input
+frames/s, dequeued output buffers/s, and queue-to-output residence time. The
+last includes decoder buffering and scheduling. These are separate from network
+traffic, radio loss and physically displayed frames.
+
+Select **H.264**, **HEVC** or **AV1** in **Expected stream codec**, then press
+**Verify** while streaming. Select the actual codec in your streamer first;
+this dropdown sets the expectation to check. Verification requests a new
+complete decoder-input sample, checks its length and SHA-256, then parses its
+NAL/OBU framing and parameter/frame headers independently of settings labels.
+It saves the bytes and JSON verdict under `bitrate/diagnostics/` on the PC.
+Missing headers, stale/mismatched evidence or an unsupported patch produce
+**inconclusive**, never a pass. Waiting for a sequence header/keyframe can take
+several seconds. This verifies one accepted input sample before any helper
+rewrite; it does not decode the picture or prove display quality.
+
+Portable data stays in `runs/<session>/` beside the executable. Running source
+directly defaults to `../builds/SteamVRColourLab/build/runs/`; `--output` selects
+another location and `COLOURLAB_OUTPUT_ROOT` changes the external source root.
 
 ## Help
 

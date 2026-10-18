@@ -14,6 +14,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from .core import MODES, PATTERNS, PRESETS, Settings, hue_endpoints
 from .bitrate import SCENES
+from .codec_verify import CODECS
 
 
 @dataclass
@@ -31,7 +32,7 @@ class Button:
 
 class DashboardUI:
     WIDTH, HEIGHT = 1280, 800
-    PAGES = ("Source", "RGB", "Hue", "Geometry", "Session", "Files", "Bitrate")
+    PAGES = ("Source", "RGB", "Hue", "Geometry", "Session", "Files", "Bitrate", "Telemetry")
     # One source of UI limits; Settings.validate remains authoritative.
     NUMBERS = {
         "hue": ("Hue (degrees)", 0, 360, 1),
@@ -73,7 +74,8 @@ class DashboardUI:
     def sync(self):
         state = (repr(self.app.settings), self.app.preset_index,
                  self.app.cycle_start is not None, self.app.notice,
-                 repr(self.app.bitrate.snapshot()), self.app.bitrate.serial, self.app.bitrate_status())
+                 repr(self.app.bitrate.snapshot()), self.app.bitrate.serial, self.app.bitrate_status(),
+                 self.app.codec_expected, self.app.usb_only, self.app.telemetry_status())
         if state != self._state:
             self._state = state
             if self.app.notice and self.app.notice != self._notice:
@@ -92,6 +94,8 @@ class DashboardUI:
         self.editor = None
         if page == "Bitrate":
             self.message = "Fullscreen in both eyes. Target is a note; set bitrate in your streamer. OPEN OPTIONS restores controls."
+        if page == "Telemetry":
+            self.message = "Codec selection sets the expectation. Verify reads encoded bytes; it does not change the streamer."
         if page == "Files":
             self.refresh_files()
         self.rebuild()
@@ -107,6 +111,12 @@ class DashboardUI:
 
     def toggle(self, field):
         self.change(**{field: not getattr(self.app.settings, field)})
+
+    def next_codec(self):
+        self.app.codec_expected = CODECS[(CODECS.index(self.app.codec_expected) + 1) % len(CODECS)]
+
+    def toggle_usb(self):
+        self.app.usb_only = not self.app.usb_only
 
     def toggle_cycle(self):
         self.app.set_cycle(self.app.cycle_start is None)
@@ -290,6 +300,15 @@ class DashboardUI:
             self.button("bitrate:probe", (24, 582, 630, 642), "Connect / disconnect headset probe", self.app.toggle_headset_probe)
             self.button("bitrate.serial", (648, 582, 1256, 642), "Device: " + (self.app.bitrate.serial or "auto (one headset)"),
                         lambda: self.edit("bitrate.serial", "ADB device serial (empty = one connected headset)", False))
+        elif self.page == "Telemetry":
+            self.button("telemetry:codec", (24, 156, 880, 214), "Expected codec: " + self.app.codec_expected + "   >", self.next_codec)
+            self.button("telemetry:verify", (900, 156, 1256, 214), "Verify", self.app.verify_codec)
+            self.button("telemetry:probe", (24, 230, 630, 288), "Connect / disconnect ADB", self.app.toggle_headset_probe)
+            self.button("telemetry:usb", (648, 230, 1256, 288), "USB only: " + ("On" if self.app.usb_only else "Off"), self.toggle_usb)
+            for i, text in enumerate(self.app.telemetry_status()):
+                self.line(32, 310 + i * 38, text)
+            self.line(32, 592, "Automatically saved on PC: telemetry/samples.csv and samples.jsonl")
+            self.line(32, 628, "Decoder output is not display proof. Queue-to-output time includes buffering.")
         elif self.page == "Quit":
             self.line(32, 220, "Exit Colour Lab and end this test session?")
             self.button("quit:confirm", (24, 328, 630, 404), "Exit application", self.app.stop)

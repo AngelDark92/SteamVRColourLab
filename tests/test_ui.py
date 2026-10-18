@@ -25,7 +25,7 @@ class UITests(unittest.TestCase):
         self.assertEqual(self.ui.read(), self.app.settings)
 
     def test_bitrate_tab_and_desktop_minimize_can_be_restored(self):
-        self.assertEqual([self.ui.tabs.tab(tab, "text") for tab in self.ui.tabs.tabs()], ["Colour tests", "Bitrate"])
+        self.assertEqual([self.ui.tabs.tab(tab, "text") for tab in self.ui.tabs.tabs()], ["Colour tests", "Bitrate", "Telemetry"])
         self.ui.tabs.select(1)
         self.ui.root.update()
         self.ui.root.iconify()
@@ -41,6 +41,15 @@ class UITests(unittest.TestCase):
         self.assertTrue(self.ui.apply())
         self.assertEqual(self.app.settings.start_rgb[0], .0123456789)
         self.assertEqual(self.app.settings.mode, "10bit")
+
+    def test_codec_dropdown_passes_expectation_to_verify_without_editing_settings(self):
+        from unittest.mock import Mock
+        self.app.verify_codec = Mock()
+        original = self.app.settings
+        self.ui.codec_choice.set("AV1")
+        self.ui.codec_verify_button.invoke()
+        self.app.verify_codec.assert_called_once_with("AV1")
+        self.assertEqual(self.app.settings, original)
 
     def test_invalid_input_keeps_last_valid_configuration(self):
         initial = self.app.settings

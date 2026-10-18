@@ -8,6 +8,7 @@ from pathlib import Path
 
 from .core import MODES, PATTERNS, PRESETS, Settings, apply_preset, hue_endpoints
 from .bitrate import SCENES
+from .codec_verify import CODECS
 
 
 class Controls:
@@ -31,6 +32,8 @@ class Controls:
         colour_tab, bitrate_tab = ttk.Frame(self.tabs), ttk.Frame(self.tabs, padding=16)
         self.tabs.add(colour_tab, text="Colour tests")
         self.tabs.add(bitrate_tab, text="Bitrate")
+        telemetry_tab = ttk.Frame(self.tabs)
+        self.tabs.add(telemetry_tab, text="Telemetry")
         canvas = tk.Canvas(colour_tab, highlightthickness=0)
         scrollbar = ttk.Scrollbar(colour_tab, orient="vertical", command=canvas.yview)
         canvas.configure(yscrollcommand=scrollbar.set)
@@ -144,6 +147,53 @@ class Controls:
                   wraplength=575).grid(row=8, column=0, sticky="w", pady=(8, 0))
         self.refresh()
         self.build_bitrate(bitrate_tab)
+        self.build_telemetry(telemetry_tab)
+
+    def build_telemetry(self, parent):
+        canvas = tk.Canvas(parent, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+        frame = ttk.Frame(canvas, padding=16)
+        item = canvas.create_window((0, 0), window=frame, anchor="nw")
+        frame.bind("<Configure>", lambda _: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.bind("<Configure>", lambda e: canvas.itemconfigure(item, width=e.width))
+        frame.columnconfigure(1, weight=1)
+        ttk.Label(frame, text="Stream telemetry & codec verification", style="Title.TLabel").grid(row=0, column=0, columnspan=3, sticky="w")
+        ttk.Label(frame, text="PC telemetry records automatically to this session's telemetry folder.\n"
+                  "Connect an authorized headset for battery, temperatures and decoder measurements.", wraplength=580).grid(
+                      row=1, column=0, columnspan=3, sticky="w", pady=12)
+        self.telemetry_usb = tk.BooleanVar(value=True)
+        ttk.Checkbutton(frame, text="USB ADB only (one USB headset)", variable=self.telemetry_usb).grid(row=2, column=0, columnspan=3, sticky="w")
+        ttk.Label(frame, text="ADB serial").grid(row=3, column=0, sticky="w", pady=8)
+        ttk.Entry(frame, textvariable=self.bitrate_serial).grid(row=3, column=1, sticky="ew")
+        ttk.Button(frame, text="Connect / disconnect", command=self.connect_telemetry).grid(row=3, column=2, padx=6)
+        self.codec_choice = tk.StringVar(value="HEVC")
+        self.combo(frame, "Expected stream codec", self.codec_choice, CODECS, 4, self.select_codec)
+        self.codec_verify_button = ttk.Button(frame, text="Verify", command=self.verify_codec)
+        self.codec_verify_button.grid(row=5, column=0, sticky="w", pady=8)
+        ttk.Label(frame, text="Selection sets the codec to check; select the stream codec in your streamer.\n"
+                  "Verify reads fresh encoded bytes from the optional diagnostic Steam Link patch.\n"
+                  "It saves the complete sample, SHA-256 and verdict. Missing evidence is inconclusive.", wraplength=580).grid(
+                      row=6, column=0, columnspan=3, sticky="w", pady=8)
+        self.telemetry_lines = [tk.StringVar() for _ in range(7)]
+        for row, variable in enumerate(self.telemetry_lines, 7):
+            ttk.Label(frame, textvariable=variable, wraplength=580).grid(row=row, column=0, columnspan=3, sticky="w", pady=5)
+        ttk.Label(frame, text="Decoder input excludes network overhead. Queue-to-output time includes buffering;\n"
+                  "decoder outputs and PC submissions are separate from displayed frames.\n"
+                  "Connecting never installs an APK or restarts SteamVR.", wraplength=580).grid(
+                      row=14, column=0, columnspan=3, sticky="w", pady=12)
+
+    def connect_telemetry(self):
+        self.app.usb_only = self.telemetry_usb.get()
+        self.connect_probe()
+
+    def verify_codec(self):
+        self.app.verify_codec(self.codec_choice.get())
+
+    def select_codec(self, event=None):
+        self.app.codec_expected = self.codec_choice.get()
 
     def build_bitrate(self, frame):
         frame.columnconfigure(1, weight=1)
@@ -302,6 +352,11 @@ class Controls:
             self.refresh()
         if hasattr(self.app, "bitrate_status"):
             for variable, text in zip(self.bitrate_lines, self.app.bitrate_status()):
+                variable.set(text)
+        if hasattr(self.app, "telemetry_status"):
+            if self.codec_choice.get() != self.app.codec_expected:
+                self.codec_choice.set(self.app.codec_expected)
+            for variable, text in zip(self.telemetry_lines, self.app.telemetry_status()):
                 variable.set(text)
         self.root.update_idletasks()
         self.root.update()

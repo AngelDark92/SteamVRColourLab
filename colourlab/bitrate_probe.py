@@ -12,6 +12,7 @@ import time
 from pathlib import Path
 
 from .bitrate import export_case, parse_probe_line
+from .headset_diagnostics import HeadsetDiagnostics, parse_decoder_line
 
 
 def hidden_process_options():
@@ -52,20 +53,24 @@ class HeadsetProbe:
         self.commands = queue.Queue()
         self.command_worker = None
         self.exports = []
+        self.diagnostics = HeadsetDiagnostics(self.directory / "diagnostics")
 
-    def connect(self, serial=""):
+    def connect(self, serial="", usb_only=True):
         if self.worker and self.worker.is_alive():
             return
         if self.command_worker and self.command_worker.is_alive():
             self.status = "Finishing the previous ADB connection; try Connect again shortly"
             return
+        if self.diagnostics.worker and self.diagnostics.worker.is_alive():
+            self.status = "Finishing the previous diagnostics connection; try Connect again shortly"
+            return
         self.stop_event.clear()
         self.commands = queue.Queue()
         self.status = "Looking for an authorized ADB headset…"
-        self.worker = threading.Thread(target=self._read, args=(serial,), daemon=True, name="ColourLab-headset")
+        self.worker = threading.Thread(target=self._read, args=(serial, usb_only), daemon=True, name="ColourLab-headset")
         self.worker.start()
 
-    def _read(self, requested_serial):
+    def _read(self, requested_serial, usb_only=True):
         output = None
         try:
             self.adb = find_adb(self.adb_option)
@@ -74,7 +79,15 @@ class HeadsetProbe:
             listing = subprocess.run([self.adb, "devices"], capture_output=True, text=True, timeout=8,
                                      check=True, **hidden_process_options()).stdout
             devices = [parts[0] for line in listing.splitlines() if len(parts := line.split()) == 2 and parts[1] == "device"]
-            if requested_serial:
+            if not devices:
+                raise ValueError("Connect one authorized headset; check USB debugging and authorization.")
+            if usb_only:
+                usb = subprocess.run([self.adb, "-d", "get-serialno"], capture_output=True, text=True,
+                                     timeout=8, check=True, **hidden_process_options()).stdout.strip()
+                if usb not in devices or (requested_serial and requested_serial != usb):
+                    raise ValueError("USB mode needs one authorized USB headset matching the selected serial.")
+                self.serial = usb
+            elif requested_serial:
                 if requested_serial not in devices:
                     raise ValueError("Selected device is offline or unauthorized. Check ADB authorization in the headset.")
                 self.serial = requested_serial
@@ -88,7 +101,7 @@ class HeadsetProbe:
             self.log_path = self.directory / f"headset-{time.time_ns()}.log"
             output = self.log_path.open("w", encoding="utf-8", buffering=1)
             process = subprocess.Popen([self.adb, "-s", self.serial, "logcat", "-v", "monotonic", "-T", "1",
-                                        "-s", "GXRStreamProbe", "GXRTestPhase"], stdout=subprocess.PIPE,
+                                        "-s", "GXRStreamProbe", "GXRTestPhase", "GXRDecoderProbe"], stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace",
                                        **hidden_process_options())
             with self.lock:
@@ -99,6 +112,8 @@ class HeadsetProbe:
                 self.status = "ADB connected; waiting for diagnostic probe frames"
             if self.stop_event.is_set():
                 process.terminate()
+            else:
+                self.diagnostics.start(self.adb, self.serial)
             self.command_worker = threading.Thread(target=self._commands, daemon=True, name="ColourLab-markers")
             self.command_worker.start()
             for line in process.stdout:
@@ -108,6 +123,9 @@ class HeadsetProbe:
                 row = parse_probe_line(line)
                 if row:
                     self.feed(row)
+                diagnostic = parse_decoder_line(line)
+                if diagnostic:
+                    self.diagnostics.feed(diagnostic)
             if not self.stop_event.is_set():
                 with self.lock:
                     self.status = "ADB log stream ended; reconnect the headset probe"
@@ -116,6 +134,7 @@ class HeadsetProbe:
                 self.status = str(exc)
         finally:
             self.stop_event.set()
+            self.diagnostics.close()
             with self.lock:
                 self.connected = False
                 process = self.process
@@ -174,6 +193,11 @@ class HeadsetProbe:
         try:
             with self.lock:
                 path, context = self.cases[case]
+                legacy_frames = bool(self.receives)
+            if not legacy_frames:
+                with self.lock:
+                    self.status = "Workload and continuous telemetry saved on PC; no legacy transport probe export"
+                return
             result = export_case(path, self.directory / case, case, context)
             with self.lock:
                 self.result = result
@@ -197,7 +221,8 @@ class HeadsetProbe:
                     rate, fps = sum(r["size"] for r in window) * 8 / 1e6, len(window)
             return dict(connected=self.connected, status=self.status, received_mbps=rate,
                         received_aus_per_second=fps, wire_codec=self.codec if fresh else "unknown",
-                        log_file=str(self.log_path) if self.log_path else None, result=self.result)
+                        log_file=str(self.log_path) if self.log_path else None, result=self.result,
+                        diagnostics=self.diagnostics.snapshot(now))
 
     def close(self):
         # Give a just-requested end marker a bounded chance to reach logcat
@@ -206,6 +231,8 @@ class HeadsetProbe:
         while self.connected and self.commands.unfinished_tasks and time.monotonic() < deadline:
             time.sleep(.02)
         self.stop_event.set()
+        self.diagnostics.stop.set()
+        self.diagnostics.wake.set()
         with self.lock:
             self.connected = False
             process = self.process
@@ -213,7 +240,7 @@ class HeadsetProbe:
         if process and process.poll() is None:
             process.terminate()
         if self.worker:
-            self.worker.join(timeout=10)
+            self.worker.join(timeout=30)
         if self.command_worker:
             self.command_worker.join(timeout=6)
         for timer in self.exports:
@@ -222,7 +249,7 @@ class HeadsetProbe:
 
 class HostEncoderTarget:
     """Latest recorded NVENC request, deliberately never called payload Mbps."""
-    def __init__(self, path=None):
+    def __init__(self, path=None, evidence_directory=None):
         candidates = [Path(path)] if path else []
         if not path and os.name == "nt":
             try:
@@ -236,13 +263,21 @@ class HostEncoderTarget:
         self.offset = self.path.stat().st_size if self.path and self.path.is_file() else 0
         self.target, self.updated = None, None
         self.partial = ""
+        self.encode_latency, self.latency_updated = None, None
+        self.evidence = Path(evidence_directory) / "host-nvenc.log" if evidence_directory else None
+        self.identity = (self.path.stat().st_dev, self.path.stat().st_ino) if self.path and self.path.is_file() else None
 
     def poll(self):
         if not self.path or not self.path.is_file():
             return
         try:
-            if self.path.stat().st_size < self.offset:
+            stat = self.path.stat()
+            identity = (stat.st_dev, stat.st_ino)
+            if (self.identity is not None and self.identity != identity) or stat.st_size < self.offset:
                 self.offset, self.partial = 0, ""
+                self.target, self.updated = None, None
+                self.encode_latency, self.latency_updated = None, None
+            self.identity = identity
             with self.path.open("rb") as source:
                 source.seek(self.offset)
                 data = source.read(256 * 1024)
@@ -251,11 +286,27 @@ class HostEncoderTarget:
             lines = text.split("\n")
             self.partial = lines.pop()
             for line in lines:
+                if "NvencTap:" in line and self.evidence:
+                    self.evidence.parent.mkdir(parents=True, exist_ok=True)
+                    with self.evidence.open("a", encoding="utf-8") as output:
+                        output.write(line + "\n")
                 match = re.search(r"NvencTap: heartbeat api=\d+ enabled=1 .*?avg=([\d.]+)M", line)
                 if match:
                     self.target, self.updated = float(match[1]), time.monotonic()
+                elif "NvencTap: heartbeat" in line:
+                    self.target, self.updated = None, None
+                    self.encode_latency, self.latency_updated = None, None
+                latency = re.search(r"NvencTap: last 10s: .*?submit->lock mean=([\d.]+)ms", line)
+                if latency:
+                    self.encode_latency, self.latency_updated = float(latency[1]), time.monotonic()
         except OSError:
             self.target = None
 
     def snapshot(self):
         return self.target if self.updated is not None and time.monotonic() - self.updated <= 20 else None
+
+    def details(self):
+        fresh_latency = self.latency_updated is not None and time.monotonic() - self.latency_updated <= 20
+        return dict(target_mbps=self.snapshot(), encode_latency_mean_ms=self.encode_latency if fresh_latency else None,
+                    source=str(self.path) if self.path else None,
+                    scope="NVENC request and submit-to-lock latency; sent bitrate unavailable")

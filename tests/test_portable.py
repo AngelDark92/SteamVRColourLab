@@ -57,13 +57,26 @@ class PortablePathTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             fake = Mock()
-            with patch.object(entry, "application_home", return_value=root), \
+            with patch.object(entry.sys, "frozen", True, create=True), \
+                 patch.object(entry, "application_home", return_value=root), \
                  patch.object(entry, "Application", return_value=fake) as constructor:
                 self.assertEqual(entry.main(["--desktop"]), 0)
             args = constructor.call_args.args[0]
             self.assertEqual(args.output, root / "runs")
             self.assertIsNone(args.settings_dir)
             fake.close.assert_called_once()
+
+    def test_source_cli_uses_external_output_root_for_runs_and_settings(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "SteamVRColourLab"
+            fake = Mock()
+            with patch.object(entry.sys, "frozen", False, create=True), \
+                 patch.object(entry, "__loader__", None), \
+                 patch.dict(entry.os.environ, {"COLOURLAB_OUTPUT_ROOT": str(root)}), \
+                 patch.object(entry, "Application", return_value=fake) as constructor:
+                self.assertEqual(entry.main(["--desktop"]), 0)
+            self.assertEqual(constructor.call_args.args[0].output, root / "build" / "runs")
+            self.assertEqual(constructor.call_args.args[0].settings_dir, root / "build" / "settings")
 
 
 class PortablePersistenceTests(TemporaryApplicationTests):

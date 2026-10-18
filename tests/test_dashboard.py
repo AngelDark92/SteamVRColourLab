@@ -61,6 +61,15 @@ class DashboardControlTests(TemporaryApplicationTests):
         click(self.ui, "bitrate:stop")
         self.assertEqual(self.app.settings, original)
 
+    def test_telemetry_codec_controls_verify_without_changing_stream_settings(self):
+        original = self.app.settings
+        self.page("Telemetry")
+        click(self.ui, "telemetry:codec")
+        self.assertEqual(self.app.codec_expected, "AV1")
+        click(self.ui, "telemetry:verify")
+        self.assertEqual(self.app.headset_probe.diagnostics.verification["status"], "inconclusive")
+        self.assertEqual(self.app.settings, original)
+
     def test_every_settings_field_can_be_changed_using_pointer_controls(self):
         original = self.app.settings.to_dict()
         click(self.ui, "mode:10bit")

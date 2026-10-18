@@ -455,14 +455,18 @@ reopening places the full menu at the current pose. Overlay textures retain
 their fixed storage dimensions throughout. While minimized and the SteamVR
 dashboard is hidden, changing counters do not trigger full-menu texture uploads.
 
-Optional measurement requires the diagnostic `GXRStreamProbe` protocol used by
-the exact-build Codecs Support experiment. The normal Steam Link APK is not a
-measurement source. Installation/signing remain separate; no APK is bundled.
-The ADB connection is user initiated and restricted to authorized device
-selection, filtered logcat, and `GXRTestPhase` log markers. It does not clear
-logcat, install, force-stop, launch or alter application data. ADB discovery,
-markers and export run off the render thread. `--adb` selects platform-tools;
-`--steam-log` can override discovery of Steam's `vrserver.txt`.
+The legacy analyzer consumes `GXRStreamProbe` records from separately instrumented
+captures. The Codecs Support source preceding this telemetry feature did not
+produce that protocol. Its newly added `GXRDecoderProbe` is an independent
+producer with accepted decoder-input counters, rather than invented transport
+IDs/receive counters. A normal Steam Link APK provides neither protocol.
+Installation/signing remain separate; Colour Lab bundles no APK.
+ADB is user initiated: authorized USB selection (`adb -d get-serialno`), filtered
+logcat, `GXRTestPhase` log markers, package metadata, battery/thermal dumps,
+owned diagnostic request files and bounded capture reads. It does not clear
+logcat, install, force-stop or launch applications. All device commands and
+byte analysis run off the render thread. `--adb` selects platform-tools;
+`--steam-log` overrides discovery of Steam's `vrserver.txt`.
 
 The raw log, workload JSON and per-test CSV/JSON exports stay in the local run
 directory. Device phase markers delimit each uniquely identified test. Analysis
@@ -485,3 +489,60 @@ separately and expires after twenty seconds without a new sample. A larger targe
 does not ensure larger payload in simple scenes. The displayed probe codec label
 is not an independent bitstream decode or the whole-frame hash proof performed
 in the original investigation; raw capture events are retained for that audit.
+
+## Continuous telemetry and codec verification
+
+Every session writes `telemetry/samples.csv` and `samples.jsonl` at roughly one
+second intervals using the actual host interval. JSON retains source counters,
+identity, device monotonic timestamps and sensor metadata; CSV has stable scalar
+columns, empty for unavailable readings. `schema.json` describes stage/units.
+`workload_case` connects samples to fullscreen test IDs. Desktop preview has no
+scene-submission FPS. These files do not claim an exact host wire payload rate.
+
+`HostEncoderTarget` starts at the end of the Steam log, preserves new NVENC lines
+in `telemetry/host-nvenc.log`, and expires request/latency samples after 20 seconds.
+The native `submit->lock` mean includes queueing and is not isolated GPU execution
+time. Headset accepted bytes/input frames/output frames use differences between
+cumulative checkpoints divided by device monotonic seconds. Token, PID or
+generation changes, backwards counters and backwards clocks require a new
+baseline; rates expire after three seconds. Repeated/ambiguous PTS are excluded
+from queue-to-output timing. PTS is used for correlation, never as a clock.
+The maximum residence value is cumulative within a decoder generation.
+
+Battery temperature is tenths of a degree C. Thermal HAL values are already C;
+only the `Current temperatures from HAL` section is parsed. Cached callbacks,
+NaN and missing sensors supply no temperature. Sensor names/types are retained
+without assuming a sensor represents CPU/GPU. Raw package and dumpsys results,
+errors and PC timestamps are saved in `bitrate/diagnostics/system-<token>.jsonl`.
+System samples expire after 20 seconds.
+
+The optional native helper preserves exact-base runtime SHA/GOT admission for
+`2.0.20/5001712` and `2.0.23/5002363`. Collection requires a random session token
+in `colourlab-probe.request` in the Steam Link external files directory. It is
+refreshed every system-sampling cycle and expires after 30 seconds. It changes
+no codec selection, decoder buffering, transport or image processing settings.
+Counters represent accepted MediaCodec input; output counters represent dequeued
+MediaCodec buffers. Neither is a pre-retry network-receive or display counter.
+
+Verify writes a separate session-token/nonce request and accepts only a matching
+fresh `GXRDecoderProbe` capture event. The native helper copies a bounded complete
+AU before its optional codec rewrite, forwards the existing queue operation,
+then hashes and atomically writes accepted input on a worker thread. The PC
+reads at most 16 MiB plus one byte from a fixed path and checks exact length and
+SHA-256 before structural identification. Bytes, capture metadata and verdict
+are preserved. Only complete Annex-B AVC/HEVC or sized AV1 OBU samples containing
+parameter/sequence headers and coded-frame evidence are supported. Headerless,
+truncated, ambiguous, containerized or encrypted data remains inconclusive.
+These checks identify codec syntax; they do not perform entropy decoding or
+decoder conformance testing. One sample is evidence for that input, not an
+uninterrupted stream guarantee. Later disconnects label the result as saved
+evidence, and reconnect resets the displayed verdict.
+
+The pure legacy host-dump reader recognizes NvencTap's six-u32 `0x31415547`
+records (on-disk `GUA1`, despite its `GAU1` source comment). It skips capped and
+size-only records. That format lacks a timestamp, PID and session token, so its
+verdict can only be `sample_match`; it cannot verify the current live stream.
+
+Syntax and platform references: [AV1 specification](https://aomediacodec.github.io/av1-spec/),
+[Android dumpsys](https://developer.android.com/tools/dumpsys), and
+[ADB transport services](https://android.googlesource.com/platform/packages/modules/adb/+/HEAD/docs/dev/services.md).

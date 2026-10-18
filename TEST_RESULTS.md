@@ -1,3 +1,34 @@
+# Telemetry and byte verification — 2026-10-18 working tree
+
+`test_windows.bat`: **Ran 187 tests — OK**. Coverage includes real source GPU
+checks, desktop/VR telemetry controls, actual time windows and measurement stages,
+USB transport selection, stale/restarted counters, reconnect isolation, bounded
+nonce/hash-checked captures and structural AVC/HEVC/AV1 identification using
+independent encoded-byte fixtures. A verdict is inconclusive without evidence.
+
+The updated optional Codecs Support helper compiled for Android ARM64 with
+warnings treated as errors. The existing native suite passed **54 checks** and
+the new probe suite **63 checks**, both with zero failures. The focused Kotlin
+patch suite passed **8 tests, 0 failures, 0 skipped**, including both actual
+decoded renderer guards, payload tampering and idempotent installation. The
+helper payload and its Kotlin SHA pin are synchronized in `steamlink-patches`.
+
+The Windows portable package built successfully; independent archive/hash and
+relocated CLI checks passed. The VR Telemetry page was rendered and inspected.
+The packaged `--desktop --self-test` passed the real GPU precision check
+(256/1024/4010 source levels) and rendered all eight RGBA menu pages.
+All integration logs and preview images are outside the checkout under
+`../builds/SteamVRColourLab/build/telemetry-*`. Previous package contents and
+portable user data were retained. This is local working-tree validation, not
+a CI/release claim. No device commands, APK installation, SteamVR restart or
+live headset telemetry/codec verification was performed. Android external-file
+permissions and callback behavior remain runtime validation points.
+
+The earlier `GXRStreamProbe` export protocol is retained for old captures;
+it was not emitted by the previously bundled Codecs Support source. The new
+`GXRDecoderProbe` measures accepted decoder input rather than fabricating
+transport-receive IDs or bitrate. A decoder output is not display proof.
+
 # Bitrate tab validation — 2026-10-15 working tree
 
 `test_windows.bat`: **Ran 150 tests — OK**. The suite includes real

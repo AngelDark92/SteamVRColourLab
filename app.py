@@ -8,6 +8,7 @@ import hashlib
 import importlib.metadata
 import json
 import logging
+import os
 import platform
 import sys
 import time
@@ -20,6 +21,8 @@ from colourlab import __version__, shaders
 from colourlab.core import MODES, PATTERNS, PRESETS, Settings, apply_preset
 from colourlab.bitrate import BitrateTest
 from colourlab.bitrate_probe import HeadsetProbe, HostEncoderTarget
+from colourlab.telemetry import SessionTelemetry
+from colourlab.codec_verify import CODECS
 
 
 def application_home() -> Path:
@@ -100,7 +103,10 @@ class Application:
         self.events = (self.run_dir / "events.jsonl").open("a", encoding="utf-8", buffering=1)
         self.bitrate = BitrateTest()
         self.headset_probe = HeadsetProbe(self.run_dir / "bitrate", getattr(args, "adb", None))
-        self.encoder_target = HostEncoderTarget(getattr(args, "steam_log", None))
+        self.encoder_target = HostEncoderTarget(getattr(args, "steam_log", None), self.run_dir / "telemetry")
+        self.telemetry = SessionTelemetry(self.run_dir)
+        self.codec_expected = "HEVC"
+        self.usb_only = True
         self.next_bitrate_poll = 0.0
         logging.basicConfig(filename=self.run_dir / "application.log", level=logging.INFO,
                             format="%(asctime)s %(levelname)s %(message)s", force=True)
@@ -316,17 +322,49 @@ class Application:
             import threading
             threading.Thread(target=self.headset_probe.close, daemon=True, name="ColourLab-disconnect").start()
         else:
-            self.headset_probe.connect(self.bitrate.serial)
+            self.headset_probe.connect(self.bitrate.serial, self.usb_only)
+
+    def verify_codec(self, codec=None):
+        if codec is not None:
+            if codec not in CODECS:
+                raise ValueError("Choose H.264, HEVC or AV1")
+            self.codec_expected = codec
+        self.headset_probe.diagnostics.request_verify(self.codec_expected)
+
+    def telemetry_status(self):
+        probe = self.headset_probe.snapshot()
+        diagnostic = probe["diagnostics"]
+        thermal = diagnostic["thermal"]
+        latest = self.telemetry.latest
+        fps = latest.get("scene_submissions_fps") if latest else None
+        rate = diagnostic["decoder_input_mbps"]
+        latency = diagnostic["queue_to_output_mean_ms"]
+        battery = thermal.get("battery_c")
+        sensors = ", ".join(f"{s['name']}: {s['celsius']:.1f} C" for s in thermal.get("sensors", []))
+        return (
+            "PC stereo submissions: " + (f"{fps:.1f} fps" if fps is not None else "unavailable in desktop preview"),
+            "Headset decoder input: " + (f"{rate:.2f} Mbps | {diagnostic['decoder_input_fps']:.1f} AU/s" if rate is not None else "unavailable; diagnostic Steam Link patch required"),
+            "Decoder output: " + (f"{diagnostic['decoder_output_fps']:.1f} buffers/s" if rate is not None else "unavailable") +
+            (f" | queue to output: {latency:.2f} ms mean" if latency is not None else ""),
+            "Battery: " + (f"{battery:.1f} C | {thermal.get('battery_percent')}%" if battery is not None else "unavailable") +
+            (f" | thermal status {thermal['thermal_status']}" if thermal.get("thermal_status") is not None else ""),
+            sensors or "Current thermal sensors: unavailable",
+            diagnostic["status"],
+            diagnostic["verification"]["message"],
+        )
 
     def bitrate_status(self):
         probe = self.headset_probe.snapshot()
+        diagnostic = probe["diagnostics"]
         target = self.encoder_target.snapshot()
         rate = probe["received_mbps"]
         fps = probe["received_aus_per_second"]
         result = probe["result"]
         return (
             f"{self.bitrate.result} | {self.bitrate.elapsed:.0f} / {self.bitrate.duration:.0f} s",
-            "Headset video (1 s): " + (f"{rate:.1f} Mbps | {fps} AUs/s | {probe['wire_codec']} (probe)" if rate is not None else "unavailable — optional diagnostic probe required"),
+            (f"Headset decoder input: {diagnostic['decoder_input_mbps']:.1f} Mbps | {diagnostic['decoder_input_fps']:.1f} AU/s"
+             if diagnostic["decoder_input_mbps"] is not None else
+             "Headset video (1 s): " + (f"{rate:.1f} Mbps | {fps} AUs/s | {probe['wire_codec']} (probe)" if rate is not None else "unavailable — optional diagnostic probe required")),
             "Host encoder target: " + (f"{target:.0f} Mbps (request, not delivered payload)" if target is not None else "unavailable (request, not delivered payload)"),
             (f"Last measured test: {result['received_video_mbps']:.1f} Mbps; " +
              ("workload interrupted" if result.get("workload", {}).get("interrupted") else
@@ -382,6 +420,8 @@ class Application:
             "bitrate_workload": self.bitrate.snapshot(),
             "bitrate_headset_probe": self.headset_probe.snapshot(),
             "bitrate_host_encoder_target_mbps": self.encoder_target.snapshot(),
+            "telemetry_latest": self.telemetry.latest,
+            "codec_verification": self.headset_probe.diagnostics.snapshot()["verification"],
         }
         try:
             path.write_text(json.dumps(data, indent=2, allow_nan=False) + "\n", encoding="utf-8")
@@ -501,6 +541,10 @@ class Application:
             if now >= self.next_bitrate_poll:
                 self.encoder_target.poll()
                 self.next_bitrate_poll = now + .5
+            self.telemetry.tick(time.monotonic(), submitted, self.args.desktop,
+                                self.encoder_target.details(), self.headset_probe.snapshot(),
+                                self.vr.last_submit if self.vr else self.vr_status,
+                                self.bitrate.case if self.bitrate.running else None)
             self.frame_count += 1
             status_frames += 1
             if now >= next_status:
@@ -523,6 +567,7 @@ class Application:
     def close(self):
         self.stop_bitrate()
         self.headset_probe.close()
+        self.telemetry.close()
         # Cleanup ordering matters: SteamVR -> GL resources -> context/window.
         for obj in (self.dashboard, self.vr, self.renderer, self.ui):
             if obj:
@@ -544,8 +589,12 @@ def main(argv=None) -> int:
     parser.add_argument("--desktop", action="store_true", help="Preview without connecting to SteamVR; not an end-to-end test")
     parser.add_argument("--config", type=Path, help="Load a saved settings JSON")
     parser.add_argument("--eye-size", type=dimensions, help="Override per-eye render dimensions, e.g. 2048x2048; otherwise use SteamVR recommendation")
-    parser.add_argument("--output", type=Path, default=application_home() / "runs", help="Folder for local session logs and reports; defaults beside the executable")
-    parser.add_argument("--settings-dir", type=Path, help="VR save/load folder; defaults to settings beside the executable")
+    source_output = Path(os.environ.get("COLOURLAB_OUTPUT_ROOT") or Path(__file__).resolve().parent.parent / "builds" / "SteamVRColourLab") / "build" / "runs"
+    portable = getattr(sys, "frozen", False) or getattr(globals().get("__loader__"), "archive", None)
+    parser.add_argument("--output", type=Path, default=application_home() / "runs" if portable else source_output,
+                        help="Session logs/reports; beside portable executable, external build/runs for source")
+    parser.add_argument("--settings-dir", type=Path, default=None if portable else source_output.parent / "settings",
+                        help="VR save/load folder; portable settings or external build/settings for source")
     parser.add_argument("--no-ui", action="store_true", help="Hide desktop controls; VR dashboard and preview shortcuts remain available")
     parser.add_argument("--adb", type=Path, help="Optional Android platform-tools adb executable for user-initiated headset telemetry")
     parser.add_argument("--steam-log", type=Path, help="Optional Steam vrserver.txt path for current encoder-request telemetry")
