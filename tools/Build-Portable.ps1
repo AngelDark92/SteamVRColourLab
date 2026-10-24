@@ -263,6 +263,15 @@ for filename, url, expected_hash in native_notices:
         if ($cleanup.RetainedPrevious) {
             Write-Host "Unverified or modified previous files retained: $($cleanup.RetainedPrevious)"
         }
+        if ($cleanup.CleanupSucceeded) {
+            $stale = Clear-StalePortableBuildFiles -BuildRoot $buildRoot -PackagePath $packagePath `
+                -CurrentEnvironment (Split-Path -Leaf $buildEnvironment) -KeepDays 7 -KeepPrevious 1 -Apply
+            $staleRecord = Join-Path $buildRoot 'stale-cleanup.json'
+            Assert-OwnedPath -Path $staleRecord -Root $buildRoot
+            $stale | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $staleRecord -Encoding UTF8
+            Write-Host "Stale portable cleanup reclaimed $($stale.RemovedBytes) bytes in $($stale.RemovedFiles) files."
+            if ($stale.Error) { Write-Host "Stale portable cleanup warning: $($stale.Error)" }
+        }
     }
     Write-Host "Built portable package: $packagePath"
     Write-Host "Archive: $zipPath"

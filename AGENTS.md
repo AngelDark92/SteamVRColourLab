@@ -1,64 +1,52 @@
 # SteamVRColourLab
 
-Keep generated files outside this checkout. The default output root is
-`../builds/SteamVRColourLab`, relative to the repository root. Use `build/` for staging,
-dependency environments, caches and build logs, `dist/` for packages, and `.venv/`
-for the source development environment, all beneath that external root.
+Inherit the [workspace rules](../AGENTS.md). This file adds the project contract.
 
-On this workstation the canonical root is
+## Output root
+
+Generated files never go inside this checkout. The default root is
+`../builds/SteamVRColourLab`, resolved from the repository root; on this workstation
+it is
 `D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\builds\SteamVRColourLab`.
-`project` is a placeholder for the project name; never use a literal
-`builds/project` folder. Keep any subfolders beneath `builds/SteamVRColourLab`.
-Apply this rule to every agent and delegated task, including build/test logs.
-For packaging or build-path changes, use the project skill
-[steamvrcolourlab-build](.agents/skills/steamvrcolourlab-build/SKILL.md).
+`COLOURLAB_OUTPUT_ROOT` or `tools/Build-Portable.ps1 -OutputRoot` overrides it on
+another host or in CI. Keep the project folder name and never use a literal
+`builds/project`.
 
-`COLOURLAB_OUTPUT_ROOT` overrides the root for builders, artifact verification
-and source launchers. `tools/Build-Portable.ps1` also accepts `-OutputRoot`.
-Keep CI artifact paths and the publisher's `build/` + `dist/` layout consistent.
-Use overrides for another host or CI while retaining the project folder name,
-unless the user explicitly requests a different destination.
-Disable source bytecode generation during build/test commands.
+Keep the existing layout beneath that root: `build/` for staging, dependency
+environments, caches, logs and previous packages; `dist/` for the current package
+and archive; `.venv/` for the source test environment. Preserve saved `runs` and
+`settings`, the current `dist/SteamVRColourLab` package and historical validation
+evidence. Suppress source bytecode with `-B` or `PYTHONDONTWRITEBYTECODE=1`.
 
-Preserve saved `runs` and `settings`, unknown files in previous packages, and
-historical validation evidence during cleanup. Validate resolved paths and
-reject junctions/symlinks before moving or deleting generated trees.
+## Build, test and cleanup
 
-## Local test gate
-
-Hosted CI no longer runs the unit suite; it only checks the build-integrity
-pieces, then builds, verifies and publishes the release package. Run the full
-suite locally from the repository root before reporting any task done:
-
-```bat
+```powershell
 test_windows.bat
+tools\Build-Portable.ps1
+python -B tools\build_zipapp.py
+python tools\verify_package.py --plan ..\builds\SteamVRColourLab\build\release-plan.json
 ```
 
-`git config core.hooksPath .githooks` (once per clone) makes
-[.githooks/pre-push](.githooks/pre-push) run the same suite before every push;
-a failing suite blocks the push. `git push --no-verify` skips it and CI will
-not catch the regression. Report the `Ran N tests` / `OK` lines with the result.
+`test_windows.bat` is the full local gate. Run it before reporting any task done and
+report the `Ran N tests` / `OK` lines. `git config core.hooksPath .githooks` (once per
+clone) runs the same suite before every push; `git push --no-verify` bypasses it and
+CI will not catch the regression.
 
-## Agent host setup
+`tools/Build-Portable.ps1` automatically prunes stale staging, previous packages and
+old build environments after a successful build. For a manual pass, preview with
+`tools/Prune-Portable.ps1` and delete only after review with `-Apply`. Never delete
+the current package, saved user data or evidence. Never run a full build unless the
+task needs a package or the project gate requires it.
 
-This repository carries instruction files for several agent hosts. Each host
-reads a different subset:
+A local build reports `colourlab.__version__`; CI stamps the calculated release
+version before building. Do not treat a local `BUILD_INFO.json` version as the
+release tag.
 
-- **Hermes** reads this file and [.agents/AGENTS.md](.agents/AGENTS.md). Once the
-  checkout is trusted (`hermes skills trust` in the repository root, once per
-  machine), it also loads the project skills in [.agents/skills/](.agents/skills/).
-- **Codex / Copilot** read `.github/agents/` and any `.codex/` presets.
-- **Claude Code** reads `CLAUDE.md`.
+## Skills and hosts
 
-Hermes ignores `.github/agents/`, `.github/copilot-instructions.md`, and
-`.codex/`. Those presets stay for the other hosts. The Hermes equivalents:
-
-- Delegated work uses the `delegate_task` tool, not named agent presets. Paste
-  the role contract from
-  [.agents/skills/cavecrew/references/hermes-role-contracts.md](.agents/skills/cavecrew/references/hermes-role-contracts.md)
-  into each child's `context`, together with the goal and every path. A child
-  starts with a fresh conversation and inherits the parent's tools and model.
-  Children cannot call `clarify`; keep the `ambiguous. ask:` terminal line.
-- The `cavecrew*` and `caveman*` skills in `.agents/skills/` are third-party and
-  assume Claude Code or Anthropic hooks. Each carries a Hermes note where its
-  mechanics differ. See [README.md](README.md#agent-instructions).
+Use [steamvrcolourlab-build](.opencode/skills/steamvrcolourlab-build/SKILL.md) for
+build, packaging or output-path work, and `cavecrew` for delegation. OpenCode reads
+`AGENTS.md`, `.opencode/agents/` and `.opencode/skills/`; Cursor reads
+[.cursor/rules/project.mdc](.cursor/rules/project.mdc); Hermes reads this file and
+[.agents/AGENTS.md](.agents/AGENTS.md). Host shims add mechanics only; they do not
+repeat these rules.

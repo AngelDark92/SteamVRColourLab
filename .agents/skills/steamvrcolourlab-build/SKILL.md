@@ -1,42 +1,52 @@
 ---
 name: steamvrcolourlab-build
-description: Build, package, verify or relocate SteamVRColourLab outputs using its external project folder. Use for changes to build scripts, CI artifact paths, source launchers or build cleanup in this repository.
+description: Build, package, verify or clean SteamVRColourLab outputs in the external project folder. Use for build scripts, CI paths, launchers or output cleanup.
 ---
 
 # SteamVRColourLab builds
 
-Read the repository [AGENTS.md](../../../AGENTS.md). The canonical local output
-root is `../builds/SteamVRColourLab`, relative to the repository root:
+Inherit [AGENTS.md](../../../AGENTS.md). The output root is
+`../builds/SteamVRColourLab`, resolved from the repository root; on this workstation
 `D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\builds\SteamVRColourLab`.
-`project` in workspace path examples means the project name. Never create
-literal `builds/project`, or put generated build directories in the checkout.
+`COLOURLAB_OUTPUT_ROOT` and `Build-Portable.ps1 -OutputRoot` override it. Keep the
+project folder name; never create `builds/project` or generated trees inside the
+checkout.
 
-Keep subfolders beneath that root: `build/` for staging, dependency caches,
-diagnostic logs and previous packages; `dist/` for distributable packages;
-`.venv/` for source dependencies. Historical validation reports remain in source.
-Suppress source bytecode with `-B` or `PYTHONDONTWRITEBYTECODE=1`.
+Use `build/` for staging, build environments, caches, logs and previous packages;
+`dist/` for the current package and archive; `.venv/` for source dependencies.
+Preserve saved `runs`/`settings`, `dist/SteamVRColourLab`, and historical validation
+evidence. Suppress bytecode with `-B` or `PYTHONDONTWRITEBYTECODE=1`.
 
-Build from the repository root with `tools/Build-Portable.ps1` or
-`build_portable_windows.bat`. Build the Python archive with
-`python -B tools/build_zipapp.py`. Verify packages with `tools/verify_package.py`
-and the matching external plan. Run the full suite with `test_windows.bat` (or
-`..\builds\SteamVRColourLab\.venv\Scripts\python.exe -B -m unittest discover -v`)
-at the end of every task; hosted CI no longer repeats it, so this suite and
-`.githooks/pre-push` (`git config core.hooksPath .githooks`) are the release gate.
+## Commands
 
-Keep PowerShell, Python, batch launchers, documentation, CI and checksum records
-consistent after changing paths. CI uses the same named folder beside its
-checkout; upload and download the existing `build/` + `dist/` artifact layout.
-`actions/upload-artifact` rejects any pattern outside the workspace
-(`Relative pathing '.' and '..' is not allowed`), so the build job copies the
-ZIP, its checksum and the plan into a workspace `ci-artifacts/` folder and the
-publisher reads that folder. Keep external output paths out of artifact
-patterns.
-`COLOURLAB_OUTPUT_ROOT` and PowerShell `-OutputRoot` support other hosts; retain
-the project folder name unless the user requests a different destination.
+```powershell
+test_windows.bat
+tools\Build-Portable.ps1
+python -B tools\build_zipapp.py
+python tools\verify_package.py --plan ..\builds\SteamVRColourLab\build\release-plan.json
+tools\Prune-Portable.ps1            # preview
+tools\Prune-Portable.ps1 -Apply     # delete stale staging/previous/old venvs
+```
 
-Before moving or cleaning outputs, inventory owned paths, validate absolute
-source and destination paths, reject junctions/symlinks, and preserve saved
-`runs`/`settings`, unknown backup files and other projects' files. Verify moved
-files and retained data by hash. Record results in `WORKSPACE_CLEANUP.md` and
-distinguish local checks from GitHub Actions or headset runtime verification.
+`test_windows.bat` is the full local gate and matches `.githooks/pre-push`. Hosted
+CI runs only `tests.test_build_cleanup`, the release plan, the portable build,
+package verification and publication. Report `Ran N tests` / `OK` separately from
+CI evidence.
+
+`Build-Portable.ps1` prunes stale portable output after a successful build unless
+`-KeepBuildFiles` is set. The pruner keeps the newest previous package, the active
+`venv-*`, the current package and any `runs`/`settings` not already present
+byte-identically in `dist`. A local build reports `colourlab.__version__`; CI stamps
+the calculated release version first.
+
+## CI layout
+
+The workflow writes to `${{ github.workspace }}/../builds/SteamVRColourLab`.
+`actions/upload-artifact` rejects paths outside the workspace, so the build job copies
+the ZIP, its checksum and `release-plan.json` into a workspace `ci-artifacts/` folder;
+the publisher reads that folder. Keep artifact patterns inside the workspace.
+
+When changing a path, update the PowerShell, Python, BAT launchers, CI, README,
+checksums and tests together. Record cleanup results in `WORKSPACE_CLEANUP.md` or the
+external receipt, and label local checks separately from GitHub Actions or headset
+runtime proof.

@@ -1,72 +1,35 @@
-# Build output relocation - 2026-10-08
+# Build output and cleanup policy
 
-The output root is now
-`D:\Angelo\Desktop\SteamLink-GalaxyXR-Windows-Toolkit-FULL\builds\SteamVRColourLab`.
-Builders derive this as `../builds/SteamVRColourLab` from the source checkout, with
-`COLOURLAB_OUTPUT_ROOT` available for other machines and CI.
+The canonical output root is `../builds/SteamVRColourLab`, resolved from the
+repository root, or `COLOURLAB_OUTPUT_ROOT` when set. Generated files never belong
+inside this checkout.
 
-Moved `build/`, `dist/`, `.venv/`, and source `__pycache__/` directories outside
-the project: 20,056 files, 685,382,945 bytes (about 654 MiB). Every moved file was
-verified against its original SHA-256 before rebuilding. This relocation freed
-that space inside the checkout; it did not delete those files from the disk.
-The file inventory is retained as `migration-20261008.json` in the output root.
+- `build/` holds staging, dependency environments, caches, logs and previous
+  packages. `dist/` holds the current `SteamVRColourLab` package, ZIP and checksum.
+  `.venv/` holds the source test environment.
+- Keep exactly one previous package as recovery. Delete older staging, previous
+  packages and `venv-*` environments that do not match the active source Python.
+- `tools/Build-Portable.ps1` runs this prune automatically after a successful build.
+  For a manual pass, preview with `tools/Prune-Portable.ps1`, then use `-Apply`.
+- Never delete `dist/SteamVRColourLab`, saved `runs` or `settings`, and never delete
+  a legacy directory whose user data is not already byte-identical in the current
+  package. The pruner refuses those cases and reports them.
+- Preserve historical validation evidence. Rebuildable staging and old package
+  copies are not evidence.
 
-The initial literal `builds/project` destination was corrected to the named
-`builds/SteamVRColourLab` folder after the user's clarification. Only this
-project's 24 owned entries were moved from the shared folder; all 20,061 files
-(696,107,501 bytes, including the earlier inventory and validation outputs)
-matched their pre-move SHA-256 hashes. The correction inventory is
-`folder-correction-20261008.json` in the named output root. Other projects'
-files were preserved in their existing locations.
+## 2026-10-24 cleanup
 
-Historical staging, previous-package backups, extracted validation copies,
-dependency environments, logs and release plans were preserved externally.
-Source `runs/`, historical `validation/` evidence, project metadata, and other
-projects' existing output files were retained. Historical validation reports
-keep their original paths as evidence of the runs that produced them.
+Removed 19 stale directories (14,347 files, 590.7 MB): nine `staging-*`, seven old
+`previous-*`, two `relocated-*`, and the stale Python 3.13 build environment. Moved
+two unique legacy run sessions from `relocated-check` into the current
+`dist/SteamVRColourLab/runs` and verified every file by SHA-256 before deleting the
+legacy copy. Kept the current package, the newest previous package, the active
+Python 3.14 environment, `.venv`, and all h264/telemetry/log evidence.
 
-Verification: 128 local tests passed, actionlint passed, the `.pyz` and Windows
-portable builds succeeded, ZIP integrity/checksum/metadata and relocated
-executable startup passed, and 6 saved portable data files remained byte-identical.
-The successful portable build removed 61,479,265 bytes of its own disposable
-staging and verified previous-package copies. No in-project build, dist,
-environment or source bytecode directories were recreated by these checks.
-GitHub Actions and headset runtime behavior were not tested in this task.
+The next successful `Build-Portable.ps1` run reclaimed another 67,449,696 bytes in
+1,199 staging files and left no new staging or previous directory behind.
 
-Regeneration from the source checkout:
-
-```powershell
-.\tools\Build-Portable.ps1
-python -B tools\build_zipapp.py
-..\builds\SteamVRColourLab\.venv\Scripts\python.exe -B -m unittest discover -v
-```
-
-Detailed validation logs are in the external `build/colourlab-relocation-*.log`
-files. Future builds retain caches and saved data there, and automatically
-clean only their own successful staging and verified previous-package files.
-
-Checks repeated after the folder-name correction: 128 tests passed, both skills
-passed validation, actionlint passed, the `.pyz` and Windows PowerShell 5.1
-portable builds succeeded, and package verification and source launcher startup
-passed. All 6 saved portable data files retained their hashes. The corrected
-portable build reclaimed 61,484,401 bytes of its own disposable build files.
-The fresh logs are `build/colourlab-named-folder-*.log` in the named output root.
-Project `AGENTS.md`, `.agents/AGENTS.md`, cavecrew delegation guidance and the
-`steamvrcolourlab-build` skill document the required output location.
-# Bitrate tab package — 2026-10-15
-
-Built and verified the updated portable application at the canonical external
-`../builds/SteamVRColourLab/dist/` location. Three successful packaging passes
-removed **189,448,818 bytes in 3,306 files** through success-gated cleanup,
-restricted to each invocation's staging and verified previous-package files.
-The final pass removed 63,619,566 bytes in 1,103 files. None reported retained
-previous files or a cleanup error. Historical build folders, toolchains, environments,
-validation evidence and unrelated outputs were preserved.
-
-All **six existing portable saved-data files** matched their pre-build SHA-256
-after restoration. The distributable ZIP excludes saved runs/settings. Successful
-unit-test and relocated-package fixtures removed themselves; the task fixture
-directory is empty. Small logs, GUI previews, replay receipts and smoke-session
-evidence are retained in `build/bitrate-tab-20261015/` beneath the output root.
-See `build/portable/last-cleanup.json` and that task's `portable-smoke.json` and
-`portable-data-before.json`. No source relocation or manual broad cleanup ran.
+Historical relocation records remain in
+[validation/BUILD-OUTPUT-HISTORY-2026-10.md](validation/BUILD-OUTPUT-HISTORY-2026-10.md).
+Cleanup receipts are in `builds/_cleanup/` and
+`builds/SteamVRColourLab/build/portable/stale-cleanup.json`.

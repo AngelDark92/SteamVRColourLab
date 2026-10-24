@@ -102,6 +102,128 @@ function Get-PortableArchiveManifest {
     return $manifest
 }
 
+function Clear-StalePortableBuildFiles {
+    param(
+        [Parameter(Mandatory = $true)][string]$BuildRoot,
+        [Parameter(Mandatory = $true)][string]$PackagePath,
+        [string]$CurrentEnvironment = '',
+        [int]$KeepDays = 7,
+        [int]$KeepPrevious = 1,
+        [switch]$Apply
+    )
+    $result = [pscustomobject]@{
+        Applied = [bool]$Apply
+        Candidates = @()
+        Removed = @()
+        Refused = @()
+        RemovedBytes = [long]0
+        RemovedFiles = 0
+        Error = $null
+    }
+    try {
+        $root = [IO.Path]::GetFullPath($BuildRoot).TrimEnd('\', '/')
+        $package = [IO.Path]::GetFullPath($PackagePath).TrimEnd('\', '/')
+        if ((Split-Path -Leaf $root) -ne 'portable' -or (Split-Path -Leaf (Split-Path -Parent $root)) -ne 'build') {
+            throw "Refusing an unexpected portable build root: $root"
+        }
+        if (-not (Test-Path -LiteralPath $root -PathType Container)) { throw "Portable build root is missing: $root" }
+        if (-not (Test-Path -LiteralPath $package -PathType Container)) { throw "Current package is missing: $package" }
+
+        $candidates = New-Object 'System.Collections.Generic.List[object]'
+        $refused = New-Object 'System.Collections.Generic.List[object]'
+        $previous = @(Get-ChildItem -Force -LiteralPath $root -Directory |
+            Where-Object { $_.Name -match '^previous-\d{8}-\d{6}-\d{3}$' } |
+            Sort-Object Name -Descending)
+        $keptPrevious = @{}
+        for ($index = 0; $index -lt [Math]::Min($KeepPrevious, $previous.Count); $index++) {
+            $keptPrevious[$previous[$index].Name] = $true
+        }
+
+        foreach ($directory in @(Get-ChildItem -Force -LiteralPath $root -Directory)) {
+            $name = $directory.Name
+            $kind = $null
+            if ($name -match '^staging-\d{8}-\d{6}-\d{3}$') { $kind = 'staging' }
+            elseif ($name -match '^previous-\d{8}-\d{6}-\d{3}$') { $kind = 'previous' }
+            elseif ($name -match '^relocated-[A-Za-z0-9._-]+$') { $kind = 'relocated' }
+            elseif ($name -match '^venv-.+-x64$') { $kind = 'venv' }
+            if (-not $kind) { continue }
+            if ($kind -eq 'venv' -and $CurrentEnvironment -and $name -eq $CurrentEnvironment) { continue }
+            if ($kind -eq 'previous' -and $keptPrevious.ContainsKey($name)) { continue }
+
+            try {
+                Assert-OwnedPath -Path $directory.FullName -Root $root -InspectTree -RejectMetadata
+            } catch {
+                $refused.Add([pscustomobject]@{ Path = $directory.FullName; Reason = $_.Exception.Message })
+                continue
+            }
+
+            $files = @(Get-ChildItem -Force -Recurse -File -LiteralPath $directory.FullName -ErrorAction Stop)
+            $bytes = [long]0
+            $newest = $directory.LastWriteTimeUtc
+            foreach ($file in $files) {
+                $bytes += $file.Length
+                if ($file.LastWriteTimeUtc -gt $newest) { $newest = $file.LastWriteTimeUtc }
+            }
+            if ($files.Count -eq 0) { continue }
+            if ($KeepDays -gt 0 -and $newest -gt [DateTime]::UtcNow.AddDays(-$KeepDays)) { continue }
+
+            $reason = $null
+            $dataDirectories = @(Get-ChildItem -Force -LiteralPath $directory.FullName -Directory |
+                Where-Object { $_.Name -in @('runs', 'settings') })
+            foreach ($dataDirectory in $dataDirectories) {
+                if ((Split-Path -Parent $dataDirectory.FullName) -ne $directory.FullName) {
+                    $reason = "Nested user data needs manual review: $($dataDirectory.FullName)"
+                    break
+                }
+                foreach ($file in @(Get-ChildItem -Force -Recurse -File -LiteralPath $dataDirectory.FullName -ErrorAction Stop)) {
+                    $relative = $file.FullName.Substring($dataDirectory.FullName.Length + 1)
+                    $current = Join-Path (Join-Path $package $dataDirectory.Name) $relative
+                    if (-not (Test-Path -LiteralPath $current -PathType Leaf) -or
+                        (Get-PortableFileHash -Path $file.FullName) -ne (Get-PortableFileHash -Path $current)) {
+                        $reason = "User data is not already preserved in the current package: $($file.FullName)"
+                        break
+                    }
+                }
+                if ($reason) { break }
+            }
+            if (-not $reason -and $kind -eq 'relocated') {
+                $nested = @(Get-ChildItem -Force -Recurse -Directory -LiteralPath $directory.FullName -ErrorAction Stop |
+                    Where-Object { $_.Name -in @('runs', 'settings') })
+                if ($nested.Count) { $reason = 'Legacy directory contains user data; review manually.' }
+            }
+            if ($reason) {
+                $refused.Add([pscustomobject]@{ Path = $directory.FullName; Reason = $reason })
+                continue
+            }
+            $candidates.Add([pscustomobject]@{
+                Path = $directory.FullName; Kind = $kind; Files = $files.Count; Bytes = $bytes
+            })
+        }
+
+        $result.Candidates = $candidates.ToArray()
+        $result.Refused = $refused.ToArray()
+        if ($Apply) {
+            $removed = New-Object 'System.Collections.Generic.List[object]'
+            foreach ($candidate in $candidates) {
+                try {
+                    Remove-Item -LiteralPath $candidate.Path -Recurse -Force -ErrorAction Stop
+                    $removed.Add($candidate)
+                    $result.RemovedBytes += [long]$candidate.Bytes
+                    $result.RemovedFiles += [int]$candidate.Files
+                } catch {
+                    $refused.Add([pscustomobject]@{ Path = $candidate.Path; Reason = $_.Exception.Message })
+                }
+            }
+            $result.Removed = $removed.ToArray()
+            $result.Refused = $refused.ToArray()
+        }
+    } catch {
+        $result.Error = $_.Exception.Message
+        Write-Warning "Stale portable cleanup stopped; remaining files were preserved. $($_.Exception.Message)"
+    }
+    return $result
+}
+
 function Clear-PortableBuildFiles {
     param(
         [string]$Staging,

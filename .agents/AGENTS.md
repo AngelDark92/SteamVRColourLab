@@ -1,15 +1,11 @@
-# Project agents and skills
+# Hermes project entry
 
-Inherit [the project instructions](../AGENTS.md). All agents and project skills
-must place generated build files, packages, caches, environments and build/test
-logs under `../builds/SteamVRColourLab` relative to the repository root.
-Preserve their existing subfolder structure. Never use literal `builds/project`.
+Read [../AGENTS.md](../AGENTS.md) and the project skill named there. Generated
+output, build logs and test logs belong under `../builds/SteamVRColourLab`.
 
-Use [steamvrcolourlab-build](skills/steamvrcolourlab-build/SKILL.md) for build and
-packaging work. Keep these instructions project-scoped.
-
-Under Hermes, delegation uses the `delegate_task` tool, not named agent presets.
-Paste the role contract from
-[cavecrew/references/hermes-role-contracts.md](skills/cavecrew/references/hermes-role-contracts.md)
-into each child's `context`, with the goal and every path. Run
-`hermes skills trust` in the repository root once so these project skills load.
+Hermes has no named agent presets. Delegate with `delegate_task`, pasting the role
+contract from
+[cavecrew/references/hermes-roles.md](skills/cavecrew/references/hermes-roles.md)
+into each child's `context` with the goal and every path. Children cannot ask
+questions; keep the `ambiguous. ask: <missing line>.` refusal. Run
+`hermes skills trust` once in this checkout to load the project skills.

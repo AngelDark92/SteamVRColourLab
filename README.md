@@ -9,27 +9,21 @@ You can control everything from inside VR.
 
 ## Agent instructions
 
-This repository carries instruction files for several agent hosts. Each host reads
-a different subset:
+`AGENTS.md` is the project contract; the nearest workspace `AGENTS.md` supplies
+shared rules.
 
-| Host | Reads | Ignores |
-| --- | --- | --- |
-| **Hermes** | `AGENTS.md`, `.agents/AGENTS.md`, `.agents/skills/` when the checkout is trusted | `.github/agents/`, `.codex/` |
-| **Codex / Copilot** | `.github/agents/`, `.codex/` | `AGENTS.md` skills mechanics |
-| **Claude Code** | `CLAUDE.md` | Hermes `delegate_task` notes |
+| Host | Entry point |
+| --- | --- |
+| **OpenCode** | `AGENTS.md`, `.opencode/agents/`, `.opencode/skills/` |
+| **Cursor** | `.cursor/rules/project.mdc` |
+| **Hermes** | `AGENTS.md`, `.agents/AGENTS.md`, `.agents/skills/` after `hermes skills trust` |
+| **Codex** | `AGENTS.md` |
+| **Claude Code** | `CLAUDE.md` |
 
-Before first use from Hermes, trust the checkout once so the project skills in
-`.agents/skills/` load:
-
-```sh
-hermes skills trust
-```
-
-Delegated work from Hermes uses the `delegate_task` tool, not the Codex
-`cavecrew-*` presets. Paste the role contract from
-[`.agents/skills/cavecrew/references/hermes-role-contracts.md`](.agents/skills/cavecrew/references/hermes-role-contracts.md)
-into each child's `context`. Generated build files, packages and logs always go
-to `../builds/SteamVRColourLab`, outside the checkout.
+Hermes delegates with `delegate_task`, not named presets. Paste the role contract
+from [`.agents/skills/cavecrew/references/hermes-roles.md`](.agents/skills/cavecrew/references/hermes-roles.md)
+into each child's `context`. Generated files and logs go to
+`../builds/SteamVRColourLab`, outside the checkout.
 
 **[Download for Windows](https://github.com/AngelDark92/SteamVRColourLab/releases/latest/download/SteamVRColourLab-Windows-x64.zip)**
 

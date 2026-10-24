@@ -45,6 +45,8 @@ jobs:
           python-version: '3.13'
           architecture: x64
           cache: pip
+      - name: Check agent instructions
+        run: python -m unittest tests.test_agent_docs -v
       - name: Test Windows cleanup and data preservation
         run: python -m unittest tests.test_build_cleanup -v
       - name: Calculate and stamp release version
