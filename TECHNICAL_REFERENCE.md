@@ -382,16 +382,18 @@ copies match byte for byte. Modified or unknown files remain in the backup.
 
 Failed builds retain their working files for diagnosis. Pass `-KeepBuildFiles`
 to retain them after a successful build too. The last automatic cleanup result
-is saved in `../builds/SteamVRColourLab/build/portable/last-cleanup.json`.
+is saved in `../builds/SteamVRColourLab/build/portable/last-cleanup.json`; the
+stale-output pass writes `stale-cleanup-build.json`, and a manual
+`Prune-Portable.ps1 -Apply` writes `stale-cleanup-manual.json`.
 
-The script keeps dependency environments (`../builds/SteamVRColourLab/build/portable/venv-*`) and the small
-license cache for faster rebuilds. You can remove these when no build is running;
-the next build recreates them and needs network access. Old `staging-*` folders
-are also disposable once any failure investigation is finished. Historical
-`previous-*` folders and extracted validation copies may contain saved settings,
-reports or manually added files: preserve those before deleting the folders.
-Automatic cleanup touches only the staging and previous-package paths created
-by the current run, not historical backups or the current external `dist` output.
+The script keeps one newest previous package, the active
+`../builds/SteamVRColourLab/build/portable/venv-*` environment and the small
+license cache for faster rebuilds. After a successful build it also removes stale
+`staging-*`, `previous-*`, legacy `relocated-*` and old `venv-*` directories once
+they are at least seven days old. It refuses junctions, unexpected names, and any
+saved `runs`/`settings` that are not already byte-identical in the current
+`dist/SteamVRColourLab` package. The current package, saved user data and
+historical validation evidence are never deleted.
 The resulting executable is unsigned. See `TEST_RESULTS.md` for the exact
 local checks and remaining headset validation. The legacy `.pyz` is still a
 source/developer format and requires separately installed Python/dependencies.

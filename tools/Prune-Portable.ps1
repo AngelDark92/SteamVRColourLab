@@ -64,5 +64,5 @@ if ($Apply) {
     Write-Output ("Preview: {0} directories, {1} files, {2} MB. Add -Apply to delete." -f `
         $rows.Count, $candidateFiles, [Math]::Round($candidateBytes / 1MB, 1))
 }
-$receipt = Join-Path $buildRoot $(if ($Apply) { 'stale-cleanup.json' } else { 'stale-preview.json' })
+$receipt = Join-Path $buildRoot $(if ($Apply) { 'stale-cleanup-manual.json' } else { 'stale-preview.json' })
 $result | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $receipt -Encoding UTF8

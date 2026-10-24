@@ -17,7 +17,7 @@ shared rules.
 | **OpenCode** | `AGENTS.md`, `.opencode/agents/`, `.opencode/skills/` |
 | **Cursor** | `.cursor/rules/project.mdc` |
 | **Hermes** | `AGENTS.md`, `.agents/AGENTS.md`, `.agents/skills/` after `hermes skills trust` |
-| **Codex** | `AGENTS.md` |
+| **Codex** | `AGENTS.md`, `.agents/skills/` |
 | **Claude Code** | `CLAUDE.md` |
 
 Hermes delegates with `delegate_task`, not named presets. Paste the role contract

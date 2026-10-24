@@ -29,9 +29,9 @@ tools\Prune-Portable.ps1 -Apply     # delete stale staging/previous/old venvs
 ```
 
 `test_windows.bat` is the full local gate and matches `.githooks/pre-push`. Hosted
-CI runs only `tests.test_build_cleanup`, the release plan, the portable build,
-package verification and publication. Report `Ran N tests` / `OK` separately from
-CI evidence.
+CI runs the agent-doc and build-cleanup checks, the release plan, the portable
+build, package verification and publication. Report `Ran N tests` / `OK`
+separately from CI evidence.
 
 `Build-Portable.ps1` prunes stale portable output after a successful build unless
 `-KeepBuildFiles` is set. The pruner keeps the newest previous package, the active

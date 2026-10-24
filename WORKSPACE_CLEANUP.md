@@ -7,8 +7,10 @@ inside this checkout.
 - `build/` holds staging, dependency environments, caches, logs and previous
   packages. `dist/` holds the current `SteamVRColourLab` package, ZIP and checksum.
   `.venv/` holds the source test environment.
-- Keep exactly one previous package as recovery. Delete older staging, previous
+- Keep the newest previous package as recovery. Delete older staging, previous
   packages and `venv-*` environments that do not match the active source Python.
+  The 7-day age gate may retain a recent unproven package or environment for one
+  more run; the next successful build removes it once it is old enough.
 - `tools/Build-Portable.ps1` runs this prune automatically after a successful build.
   For a manual pass, preview with `tools/Prune-Portable.ps1`, then use `-Apply`.
 - Never delete `dist/SteamVRColourLab`, saved `runs` or `settings`, and never delete
@@ -43,5 +45,6 @@ The next successful `Build-Portable.ps1` run reclaimed another 67,449,696 bytes 
 
 Historical relocation records remain in
 [validation/BUILD-OUTPUT-HISTORY-2026-10.md](validation/BUILD-OUTPUT-HISTORY-2026-10.md).
-Cleanup receipts are in `builds/_cleanup/` and
-`builds/SteamVRColourLab/build/portable/stale-cleanup.json`.
+Cleanup receipts are in `builds/_cleanup/`, with
+`build/portable/stale-cleanup-build.json` for automatic builds and
+`stale-cleanup-manual.json` for manual `-Apply` runs.

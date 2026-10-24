@@ -128,6 +128,7 @@ function Clear-StalePortableBuildFiles {
         }
         if (-not (Test-Path -LiteralPath $root -PathType Container)) { throw "Portable build root is missing: $root" }
         if (-not (Test-Path -LiteralPath $package -PathType Container)) { throw "Current package is missing: $package" }
+        Assert-OwnedPath -Path $package -Root (Split-Path -Parent $package) -InspectTree -RejectMetadata
 
         $candidates = New-Object 'System.Collections.Generic.List[object]'
         $refused = New-Object 'System.Collections.Generic.List[object]'
@@ -178,6 +179,7 @@ function Clear-StalePortableBuildFiles {
                 foreach ($file in @(Get-ChildItem -Force -Recurse -File -LiteralPath $dataDirectory.FullName -ErrorAction Stop)) {
                     $relative = $file.FullName.Substring($dataDirectory.FullName.Length + 1)
                     $current = Join-Path (Join-Path $package $dataDirectory.Name) $relative
+                    Assert-OwnedPath -Path $current -Root $package
                     if (-not (Test-Path -LiteralPath $current -PathType Leaf) -or
                         (Get-PortableFileHash -Path $file.FullName) -ne (Get-PortableFileHash -Path $current)) {
                         $reason = "User data is not already preserved in the current package: $($file.FullName)"

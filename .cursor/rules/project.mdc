@@ -1,19 +1,12 @@
 ---
-description: SteamVRColourLab build, test, packaging and external output rules
+description: SteamVRColourLab agent entry point
 alwaysApply: true
 ---
 
-# SteamVRColourLab
+Read [AGENTS.md](../../AGENTS.md) and the nearest project `AGENTS.md` before work.
+The project file is authoritative for output paths, build, test and cleanup
+commands.
 
-Read [AGENTS.md](../../AGENTS.md) first. Generated files never go inside this
-checkout.
-
-- Output root: `../builds/SteamVRColourLab` (or `COLOURLAB_OUTPUT_ROOT`);
-  `build/` for staging/caches/logs, `dist/` for the current package, `.venv/`
-  for source dependencies.
-- Build/test: `test_windows.bat`, `tools\Build-Portable.ps1`,
-  `python -B tools\build_zipapp.py`.
-- Run `tools\Prune-Portable.ps1` after a local build; `-Apply` only after review.
-  Preserve `runs`, `settings`, the current package and validation evidence.
-- Use `@steamvrcolourlab-build` for build or output-path changes and `@cavecrew`
-  for delegation.
+Use `@steamvrcolourlab-build` for build, package or output-path changes and
+`@cavecrew` for delegation. Host adapters add mechanics only; they do not restate
+the project rules.
