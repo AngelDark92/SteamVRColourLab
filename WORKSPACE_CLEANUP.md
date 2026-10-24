@@ -29,6 +29,18 @@ Python 3.14 environment, `.venv`, and all h264/telemetry/log evidence.
 The next successful `Build-Portable.ps1` run reclaimed another 67,449,696 bytes in
 1,199 staging files and left no new staging or previous directory behind.
 
+## 2026-10-24 verification
+
+- Local gate: `test_windows.bat` ran 200 tests, `OK`.
+- Local CI simulation: release plan `0.7.0`, portable build and
+  `verify_package.py` succeeded against commit `d24c1d2`.
+- GitHub Actions run
+  [#14](https://github.com/AngelDark92/SteamVRColourLab/actions/runs/40129070225):
+  both `Portable Windows x64` and `Publish verified release` succeeded; release
+  `v0.7.0` was published with the ZIP and SHA-256 asset.
+- Post-build prune: 0 stale candidates; only the current package, newest previous
+  package, active environments and retained evidence remain.
+
 Historical relocation records remain in
 [validation/BUILD-OUTPUT-HISTORY-2026-10.md](validation/BUILD-OUTPUT-HISTORY-2026-10.md).
 Cleanup receipts are in `builds/_cleanup/` and
